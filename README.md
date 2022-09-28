@@ -5,8 +5,8 @@
     <a href="https://codecov.io/gh/nickatnight/tag-youre-it">
         <img alt="Coverage" src="https://codecov.io/gh/nickatnight/tag-youre-it/branch/master/graph/badge.svg?token=E03I4QK6D9"/>
     </a>
-    <a href="https://github.com/Tivix/tag-youre-it/releases">
-        <img alt="Release Status" src="https://img.shields.io/github/v/release/Tivix/tag-youre-it">
+    <a href="https://github.com/nickatnight/tag-youre-it/releases">
+        <img alt="Release Status" src="https://img.shields.io/github/v/release/nickatnight/tag-youre-it">
     </a>
 </p>
 
