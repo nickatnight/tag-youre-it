@@ -2,7 +2,10 @@
 name = "tag-youre-it"
 version = "2.0.0"
 description = "Play tag with other Redditors"
+readme = "README.md"
 authors = ["nickatnight <nickkelly.858@gmail.com>"]
+homepage = "https://github.com/nickatnight/tag-youre-it"
+repository = "https://github.com/nickatnight/tag-youre-it"
 
 [tool.poetry.dependencies]
 python = "^3.9"

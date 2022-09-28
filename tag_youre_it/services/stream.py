@@ -30,7 +30,6 @@ class InboxStreamService(AbstractStream):
             logger.info("skipping read message")
             return False
 
-        # check messages that were not comments (these are private messages or things like mod mail)
         if obj.was_comment is False:
 
             # user previously opted out and wants to play again
