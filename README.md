@@ -56,3 +56,4 @@ $ tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py
 - frontend (gameplay stats)
 - multi subreddit play (basically all subs)
 - tag back flag
+- add exception handling
