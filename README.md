@@ -5,8 +5,8 @@ Play virutal tag with other users on Reddit
 For now, this bot will only support subreddit-level play, one active game per sub (See the TODO for future enhancements):
 
 Invoke `u/TagYoureItBot` by replying to a Reddit post or comment with the phrase `!tag`. 1 of 2 things can happen:
-    - There is no active game. `u/TagYoureItBot` will reply to the same post or comment notifying the author they are now "it". A countdown will start and this author will have an alloted time to "tag" another Reddit user (within the same sub). If the countdown expires and the auther has not tagged another user, the game will end. Otherwise...
-    - There is an active game. If you are the "it" user, the game will continue (see previous paragraph). If you're not it, the bot will reply to your comment stating such. The comment will include a countdown time of how much longer the current tagged user has to tag someone until the game automatically ends. 
+- There is no active game. `u/TagYoureItBot` will reply to the same post or comment notifying the author they are now "it". A countdown will start and this author will have an alloted time to "tag" another Reddit user (within the same sub). If the countdown expires and the auther has not tagged another user, the game will end. Otherwise...
+- There is an active game. If you are the "it" user, the game will continue (see previous paragraph). If you're not it, the bot will reply to your comment stating such. The comment will include a countdown time of how much longer the current tagged user has to tag someone until the game automatically ends. 
 
 
 ## Rules
@@ -24,7 +24,7 @@ A few years ago I read a [reddit blog post](https://www.redditinc.com/blog/how-w
 
 I'm also curious to see stats of user engagement (how long did a game chain last, how many users did it contain, which subreddit plays the most, etc)
 
-See r/TagYoureItBot for more updates.
+See [r/TagYoureItBot](https://www.reddit.com/r/TagYoureItBot) for more updates.
 
 ## Running Locally
 1. Clone repo `git clone https://github.com/nickatnight/tag-youre-it`
