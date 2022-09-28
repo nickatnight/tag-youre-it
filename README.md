@@ -1,3 +1,19 @@
+<p align="center">
+    <a href="https://github.com/nickatnight/tag-youre-it/actions">
+        <img alt="GitHub Actions status" src="https://github.com/nickatnight/tag-youre-it/actions/workflows/main.yml/badge.svg">
+    </a>
+    <a href="https://codecov.io/gh/nickatnight/tag-youre-it">
+        <img alt="Coverage" src="https://codecov.io/gh/nickatnight/tag-youre-it/branch/master/graph/badge.svg?token=E03I4QK6D9"/>
+    </a>
+    <a href="https://github.com/Tivix/tag-youre-it/releases">
+        <img alt="Release Status" src="https://img.shields.io/github/v/release/Tivix/tag-youre-it">
+    </a>
+</p>
+
+<p align="center">
+    <a href="https://c.tenor.com/Sf4IW_C95v4AAAAC/tag.gif"><img alt="tag" src="https://c.tenor.com/Sf4IW_C95v4AAAAC/tag.gif"></a>
+</p>
+
 # tag-youre-it :runner:
 Play virutal tag with other users on Reddit
 
@@ -6,7 +22,7 @@ For now, this bot will only support subreddit-level play, one active game per su
 
 Invoke `u/TagYoureItBot` by replying to a Reddit post or comment with the phrase `!tag`. 1 of 2 things can happen:
 - There is no active game. `u/TagYoureItBot` will reply to the same post or comment notifying the author they are now "it". A countdown will start and this author will have an alloted time to "tag" another Reddit user (within the same sub). If the countdown expires and the auther has not tagged another user, the game will end. Otherwise...
-- There is an active game. If you are the "it" user, the game will continue (see previous paragraph). If you're not it, the bot will reply to your comment stating such. The comment will include a countdown time of how much longer the current tagged user has to tag someone until the game automatically ends. 
+- There is an active game. If you are the "it" user, the game will continue (see previous paragraph). If you're not it, the bot will reply to your comment stating such. The comment will include a countdown time of how much longer the current tagged user has to tag someone until the game automatically ends.
 
 
 ## Rules
@@ -47,7 +63,7 @@ $ tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py
 ```
 
 ## TODO
-- github action for ci/cd workflow
+- ~github action for ci/cd workflow~
 - move db client to stream service
 - check for downvotes on recent comments
 - extra `CommentStreamService` to stream incoming comments from sub

@@ -1,0 +1,56 @@
+name: lint and test
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - master
+      - develop
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up python/poetry
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install Poetry
+        run: |
+          pip install -U pip
+          pip install poetry
+          poetry install
+        env:
+          POETRY_VIRTUALENVS_CREATE: true
+      - name: Black
+        run: poetry run black tag_youre_it --check
+      - name: Flake8
+        run: poetry run flake8 tag_youre_it
+      - name: run coverage
+        run: poetry run pytest --cov-report xml --cov=tag_youre_it tests/
+      - name: Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: coverage.xml
+          flags: unittests
+
+  create-release:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # need this for all history for all branches and tags
+      - name: Create Release
+        id: create_release
+        uses: nickatnight/releases-action@v3
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    outputs:
+      ReleaseTag: ${{ steps.create_release.outputs.release_tag }}
