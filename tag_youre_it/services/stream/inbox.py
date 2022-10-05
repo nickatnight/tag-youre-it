@@ -73,7 +73,7 @@ class InboxStreamService(AbstractStream):
                 await obj.reply(UNABLE_TO_TAG_SELF)
                 return game_id
 
-            if author.name in db_client.player.list_opted_out():
+            if author.name in await db_client.player.list_opted_out():
                 logger.info(f"Player [{author.name}] has opted out.")
                 await obj.reply(USER_OPTS_OUT_GAME.format(author=author.name))
                 return
