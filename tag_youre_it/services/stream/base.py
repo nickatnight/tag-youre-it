@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import AsyncIterator, Generic, List, Optional, Type, TypeVar, Union
+from typing import AsyncIterator, Optional, Type, TypeVar, Union
 
 import asyncpraw
 from asyncpraw.models.base import AsyncPRAWBase
@@ -37,6 +37,7 @@ class AbstractStream(ABC):
         :param game_id:             Id of the Game database object
         :return:                    New game id TODO: come back to this logic
         """
+        ...
 
     @abstractmethod
     def stream(
@@ -47,26 +48,4 @@ class AbstractStream(ABC):
         :param reddit:              Main Reddit wrapper object
         :return:                    Reddit obejct generator
         """
-        ...
-
-
-class AbstractRepository(Generic[ModelType, SchemaType], ABC):
-    """interface for interacting with database"""
-
-    model: Type[ModelType]
-
-    @abstractmethod
-    async def insert(self, obj_in: SchemaType) -> ModelType:
-        ...
-
-    @abstractmethod
-    async def all(self) -> List[Type[ModelType]]:
-        ...
-
-    @abstractmethod
-    async def one(self, field: str, value: str) -> Type[ModelType]:
-        ...
-
-    @abstractmethod
-    async def update(self, *args, **kwargs) -> ModelType:
         ...

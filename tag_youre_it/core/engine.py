@@ -3,10 +3,10 @@ import logging
 import asyncpraw
 from aiohttp import ClientSession
 
-from tag_youre_it.core.abstract import AbstractStream
 from tag_youre_it.core.clients import DbClient
 from tag_youre_it.core.config import settings
 from tag_youre_it.core.typed import RedditClientConfigTyped
+from tag_youre_it.services import AbstractStream
 
 
 logger = logging.getLogger(__name__)

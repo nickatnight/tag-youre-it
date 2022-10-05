@@ -64,7 +64,7 @@ $ tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py
 
 ## TODO
 - ~github action for ci/cd workflow~
-- move db client to stream service
+- move db client to stream service init
 - check for downvotes on recent comments
 - extra `CommentStreamService` to stream incoming comments from sub
 - tests

@@ -4,7 +4,6 @@ from typing import Optional
 from asyncpraw import Reddit
 from asyncpraw.models.base import AsyncPRAWBase
 
-from tag_youre_it.core.abstract import AbstractStream
 from tag_youre_it.core.clients import DbClient
 from tag_youre_it.core.const import (  # COMMENT_REPLY_YOURE_IT,; CURRENT_ACTIVE_GAME,
     UNABLE_TO_TAG_SELF,
@@ -13,6 +12,7 @@ from tag_youre_it.core.const import (  # COMMENT_REPLY_YOURE_IT,; CURRENT_ACTIVE
     WELCOME_BACK,
     TagEnum,
 )
+from tag_youre_it.services import AbstractStream
 
 
 logger = logging.getLogger(__name__)
@@ -78,11 +78,11 @@ class InboxStreamService(AbstractStream):
                 await obj.reply(USER_OPTS_OUT_GAME.format(author=author.name))
                 return
 
-            # # a game is currently being played
+            # a game is currently being played
             # if game_id is not None:
             #     player = db_client.player.by_reddit_id(mention_author.id)
 
-            #     if player.is_it:
+            # if not player.is_it:
 
             #     # TODO: get user who is currently it
             #     await obj.reply(CURRENT_ACTIVE_GAME.format(author=author.name))
@@ -103,7 +103,3 @@ class InboxStreamService(AbstractStream):
 
     def stream(self, reddit: Reddit):
         return reddit.inbox.stream()
-
-
-class CommentStreamService(AbstractStream):
-    pass
