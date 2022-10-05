@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tag-youre-it"
-version = "2.1.0"
+version = "2.1.1"
 description = "Play tag with other Redditors"
 readme = "README.md"
 authors = ["nickatnight <nickkelly.858@gmail.com>"]
