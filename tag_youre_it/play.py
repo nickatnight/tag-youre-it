@@ -8,13 +8,15 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 if __name__ == "__main__":
     from tag_youre_it.core.clients import DbClient
     from tag_youre_it.core.config import settings
+    from tag_youre_it.core.db import async_session
     from tag_youre_it.core.engine import Engine
-    from tag_youre_it.repository.game import GameRepository
-    from tag_youre_it.repository.player import PlayerRepository
+    from tag_youre_it.repository import GameRepository, PlayerRepository
     from tag_youre_it.services import InboxStreamService
 
+    player = PlayerRepository(async_session())
+    game = GameRepository(async_session())
     e = Engine(
-        db_client=DbClient(PlayerRepository, GameRepository),
+        db_client=DbClient(player, game),
         stream_service=InboxStreamService(),
         reddit_config={
             "client_id": settings.CLIENT_ID,

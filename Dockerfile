@@ -6,7 +6,7 @@ RUN pip install poetry
 
 COPY ./pyproject.toml ./poetry.lock* /tmp/
 
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --with dev
 
 FROM python:3.9
 
@@ -19,4 +19,7 @@ COPY . /code/
 ENV PYTHONPATH "${PYTHONPATH}:/code"
 
 WORKDIR /code/tag_youre_it
+
+EXPOSE 8666
+
 CMD ["python3", "./play.py"]

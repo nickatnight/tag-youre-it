@@ -1,5 +1,4 @@
-from tag_youre_it.repository.base import AbstractRepository
-from tag_youre_it.repository.player import PlayerRepository
+from tag_youre_it.repository import AbstractRepository, PlayerRepository
 
 
 class DbClient:
