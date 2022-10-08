@@ -73,3 +73,4 @@ $ tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py
 - multi subreddit play (basically all subs)
 - tag back flag
 - add exception handling
+- ~add docker compose for local testing/dev~
