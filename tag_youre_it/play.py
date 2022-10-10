@@ -6,10 +6,7 @@ import os
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 if __name__ == "__main__":
-    from tag_youre_it.core.clients import DbClient
-    from tag_youre_it.core.config import settings
-    from tag_youre_it.core.db import async_session
-    from tag_youre_it.core.engine import Engine
+    from tag_youre_it.core import DbClient, Engine, async_session, settings
     from tag_youre_it.repository import GameRepository, PlayerRepository
     from tag_youre_it.services import InboxStreamService
 

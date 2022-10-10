@@ -46,6 +46,6 @@ class AbstractStream(ABC):
         """stream incoming Reddit objects
 
         :param reddit:              Main Reddit wrapper object
-        :return:                    Reddit obejct generator
+        :return:                    Reddit object generator
         """
         ...

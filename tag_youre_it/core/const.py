@@ -1,6 +1,11 @@
 # flake8: noqa
 
 
+from os import stat
+
+from emoji import emojize
+
+
 class TagEnum:
     KEY = "!tag"
     ENABLE_PHRASE = "i want to play tag again"
@@ -16,23 +21,53 @@ If you haven't tagged anybody within the allotted time, the game will reset and 
 """
 
 UNABLE_TO_TAG_SELF = """
-You can't tag yourself! xD
+You can't tag yourself! :no_entry:
 """
 
 USER_OPTS_OUT_GAME = """
-u/{author} has opted out of playing tag 
+u/{author} has opted out of playing tag :no_good:
 """
 
 USER_OPTS_OUT_GAME_INFO = """
-I'm sorry to see you go {author}.
+I'm sorry to see you go u/{author}.
 
 If you would like to tag back in, send me a private message which contains 'i want to play tag again' as the subject :heart:
 """
 
 CURRENT_ACTIVE_GAME = """
-There is already an active game of Tag
+There's already an active game of Tag :runner:
 """
 
 WELCOME_BACK = """
 Welcome back to the game u/{author}! :wave:
 """
+
+
+class ReplyEnums:
+    @staticmethod
+    def _e(reply_string: str) -> str:
+        return emojize(reply_string, variant="emoji_type", language="alias")
+
+    @staticmethod
+    def comment_reply_tag(author: str) -> str:
+        return ReplyEnums._e(COMMENT_REPLY_YOURE_IT.format(author=author))
+
+    @staticmethod
+    def welcome_back(author: str) -> str:
+        return ReplyEnums._e(WELCOME_BACK.format(author=author))
+
+    @staticmethod
+    def active_game() -> str:
+        return ReplyEnums._e(CURRENT_ACTIVE_GAME)
+
+    @staticmethod
+    def unable_to_tag_self() -> str:
+        return ReplyEnums._e(UNABLE_TO_TAG_SELF)
+
+    @staticmethod
+    def user_opts_out(author: str) -> str:
+        return ReplyEnums._e(USER_OPTS_OUT_GAME.format(author=author))
+
+    @staticmethod
+    def user_opts_out_info(author: str) -> str:
+        return ReplyEnums._e(USER_OPTS_OUT_GAME_INFO.format(author=author))
