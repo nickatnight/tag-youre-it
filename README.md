@@ -67,7 +67,7 @@ $ tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py
 - move db client to stream service init
 - check for downvotes on recent comments
 - extra `CommentStreamService` to stream incoming comments from sub
-- ~add simple tests~ [#3]
+- ~add simple tests~ [#3] [#9]
 - public web api
 - frontend (gameplay stats)
 - multi subreddit play (basically all subs)
