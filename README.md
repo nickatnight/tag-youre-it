@@ -63,14 +63,15 @@ $ tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py
 ```
 
 ## TODO
-- ~github action for ci/cd workflow~
+- ~github action for ci/cd workflow~ [#2]
 - move db client to stream service init
 - check for downvotes on recent comments
 - extra `CommentStreamService` to stream incoming comments from sub
-- tests
+- ~add simple tests~ [#3]
 - public web api
 - frontend (gameplay stats)
 - multi subreddit play (basically all subs)
 - tag back flag
 - add exception handling
-- ~add docker compose for local testing/dev~
+- ~add docker compose for local testing/dev~ [#5]
+- increase coverage to sensible percentage

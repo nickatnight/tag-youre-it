@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from pydantic import validator
 from sqlmodel import Field, SQLModel
 
-from tag_youre_it.models.base import BaseModel
+from tag_youre_it.models import BaseModel
 
 
 # from tag_youre_it.models.player import Player
