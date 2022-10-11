@@ -7,4 +7,4 @@ class RedditClientConfigTyped(TypedDict):
     username: str
     password: str
     user_agent: str
-    requestor_kwargs: Optional[Dict]
+    requestor_kwargs: Optional[Dict]  # type: ignore

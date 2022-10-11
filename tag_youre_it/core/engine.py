@@ -1,4 +1,6 @@
+import copy
 import logging
+from typing import Optional, Union
 
 import asyncpraw
 from aiohttp import ClientSession
@@ -6,7 +8,7 @@ from aiohttp import ClientSession
 from tag_youre_it.core.clients import DbClient
 from tag_youre_it.core.config import settings
 from tag_youre_it.core.typed import RedditClientConfigTyped
-from tag_youre_it.services import AbstractStream
+from tag_youre_it.services import CommentStreamService, InboxStreamService
 
 
 logger = logging.getLogger(__name__)
@@ -24,26 +26,27 @@ class GameEngine:
     def __init__(
         self,
         db_client: DbClient,
-        stream_service: AbstractStream,
+        stream_service: Union[InboxStreamService, CommentStreamService],
         reddit_config: RedditClientConfigTyped,
     ):
-        self.db_client: DbClient = db_client
-        self.stream_service: AbstractStream = stream_service
-        self.reddit_config: RedditClientConfigTyped = reddit_config
+        self.db_client = db_client
+        self.stream_service = stream_service
+        self.reddit_config = reddit_config
 
-    async def run(self):
+    async def run(self) -> None:
         logger.info(
             f"Starting session with [{self.stream_service.__class__.__name__}] stream class..."
         )
         async with ClientSession(trust_env=True) as session:
-            self.reddit_config.update(
+            config: RedditClientConfigTyped = copy.deepcopy(self.reddit_config)
+            config.update(
                 {
                     "requestor_kwargs": {
                         "session": session
                     },  # must successfully close the session when finished
                 }
             )
-            game_id: str = None
+            game_id: Optional[str] = ""
             db: DbClient = self.db_client
 
             async with asyncpraw.Reddit(**self.reddit_config) as reddit:
@@ -53,6 +56,6 @@ class GameEngine:
 
                     pre_flight_check: bool = await self.stream_service.pre_flight_check(db, mention)
                     if pre_flight_check:
-                        game_id: str = await self.stream_service.process(db, mention, game_id)
+                        game_id = await self.stream_service.process(db, mention, game_id)
 
                         await mention.mark_read()
