@@ -5,6 +5,7 @@ from asyncpraw import Reddit
 from asyncpraw.models import Message
 
 from tag_youre_it.core.clients import DbClient
+from tag_youre_it.core.config import settings
 from tag_youre_it.core.const import ReplyEnum, TagEnum
 from tag_youre_it.services import AbstractStream
 
@@ -66,6 +67,12 @@ class InboxStreamService(AbstractStream[Message]):
 
             author = parent.author  # the person who got tagged
             await author.load()
+
+            # prevent user from tagging bot
+            if author.name == settings.USERNAME:
+                logger.info(f"Player [{mention_author}] tried tagging bot")
+                await obj.reply(ReplyEnum.unable_to_tag_bot())
+                return game_id
 
             # prevent user from tagging self
             if author.id == mention_author.id:

@@ -16,6 +16,11 @@ def test_unable_to_tag_self_enum():
     assert "\nYou can't tag yourself! ⛔️\n" == test_str
 
 
+def test_unable_to_tag_bot_enum():
+    test_str = ReplyEnum.unable_to_tag_bot()
+    assert "\nYou can't tag the bot! ⛔️\n" == test_str
+
+
 def test_user_opts_out_enum():
     test_str = ReplyEnum.user_opts_out("test")
     assert "\nu/test has opted out of playing tag 🙅\n" == test_str

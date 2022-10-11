@@ -24,6 +24,10 @@ UNABLE_TO_TAG_SELF = """
 You can't tag yourself! :no_entry:
 """
 
+UNABLE_TO_TAG_BOT = """
+You can't tag the bot! :no_entry:
+"""
+
 USER_OPTS_OUT_GAME = """
 u/{author} has opted out of playing tag :no_good:
 """
@@ -63,6 +67,10 @@ class ReplyEnum:
     @staticmethod
     def unable_to_tag_self() -> str:
         return ReplyEnum._e(UNABLE_TO_TAG_SELF)
+
+    @staticmethod
+    def unable_to_tag_bot() -> str:
+        return ReplyEnum._e(UNABLE_TO_TAG_BOT)
 
     @staticmethod
     def user_opts_out(author: str) -> str:
