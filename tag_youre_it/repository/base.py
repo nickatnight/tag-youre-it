@@ -17,7 +17,7 @@ class AbstractRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType],
     model: Type[ModelType]
 
     def __init__(self, db: AsyncSession):
-        self.db = db
+        self.db: AsyncSession = db
 
     async def insert(self, obj_in: Type[CreateSchemaType]) -> Type[ModelType]:
         db_obj = self.model.from_orm(obj_in)  # type: ignore

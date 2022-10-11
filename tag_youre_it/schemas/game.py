@@ -2,6 +2,7 @@ from typing import List, Optional
 from uuid import UUID
 
 from tag_youre_it.models.game import GameBase
+from tag_youre_it.models.player import Player
 
 
 class IGameCreate(GameBase):
@@ -13,5 +14,5 @@ class IGameRead(GameBase):
 
 
 class IGameUpdate(GameBase):
-    players: Optional[List] = None
-    is_active: Optional[bool] = None
+    players: Optional[List[Player]]
+    is_active: Optional[bool]

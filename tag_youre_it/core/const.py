@@ -3,7 +3,7 @@
 
 from os import stat
 
-from emoji import emojize
+from tag_youre_it.core.utils import _emojize
 
 
 class TagEnum:
@@ -22,6 +22,10 @@ If you haven't tagged anybody within the allotted time, the game will reset and 
 
 UNABLE_TO_TAG_SELF = """
 You can't tag yourself! :no_entry:
+"""
+
+UNABLE_TO_TAG_BOT = """
+You can't tag the bot! :no_entry:
 """
 
 USER_OPTS_OUT_GAME = """
@@ -43,31 +47,41 @@ Welcome back to the game u/{author}! :wave:
 """
 
 
-class ReplyEnums:
+class ReplyEnum:
     @staticmethod
     def _e(reply_string: str) -> str:
-        return emojize(reply_string, variant="emoji_type", language="alias")
+        return _emojize(reply_string)
 
     @staticmethod
     def comment_reply_tag(author: str) -> str:
-        return ReplyEnums._e(COMMENT_REPLY_YOURE_IT.format(author=author))
+        return ReplyEnum._e(COMMENT_REPLY_YOURE_IT.format(author=author))
 
     @staticmethod
     def welcome_back(author: str) -> str:
-        return ReplyEnums._e(WELCOME_BACK.format(author=author))
+        return ReplyEnum._e(WELCOME_BACK.format(author=author))
 
     @staticmethod
     def active_game() -> str:
-        return ReplyEnums._e(CURRENT_ACTIVE_GAME)
+        return ReplyEnum._e(CURRENT_ACTIVE_GAME)
 
     @staticmethod
     def unable_to_tag_self() -> str:
-        return ReplyEnums._e(UNABLE_TO_TAG_SELF)
+        return ReplyEnum._e(UNABLE_TO_TAG_SELF)
+
+    @staticmethod
+    def unable_to_tag_bot() -> str:
+        return ReplyEnum._e(UNABLE_TO_TAG_BOT)
 
     @staticmethod
     def user_opts_out(author: str) -> str:
-        return ReplyEnums._e(USER_OPTS_OUT_GAME.format(author=author))
+        return ReplyEnum._e(USER_OPTS_OUT_GAME.format(author=author))
 
     @staticmethod
     def user_opts_out_info(author: str) -> str:
-        return ReplyEnums._e(USER_OPTS_OUT_GAME_INFO.format(author=author))
+        return ReplyEnum._e(USER_OPTS_OUT_GAME_INFO.format(author=author))
+
+
+class SupportedSubs:
+    """names of subreddits (case sensitive)"""
+
+    TAG_YOURE_IT_BOT = "TagYoureItBot"

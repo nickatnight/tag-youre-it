@@ -13,6 +13,7 @@ class GameBase(SQLModel):
         back_populates="game", sa_relationship_kwargs={"lazy": "selectin"}
     )
     is_active: bool = Field(...)
+    # TODO: add subreddit
 
     class Config(BaseConfig):
         json_encoder = {
@@ -20,13 +21,8 @@ class GameBase(SQLModel):
         }
         schema_extra = {
             "example": {
-                "reddit_id": "1234-43143-3134-13423",
-                "reddit_username": "nny218",
-                "icon_img": "reddit.com",
-                "opted_out": False,
-                "is_it": True,
-                "is_employee": False,
-                "created_utc": "2004-09-16T23:59:58.75",
+                "players": [{"reddit_id": "nny27"}],
+                "is_active": True,
             }
         }
 

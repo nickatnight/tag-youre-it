@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 #     |_|\__,_|\__, |       |_|\___/ \__,_| |_|  \___|    |_____|\__|
 #               __/ |
 #              |___/
-class Engine:
+class GameEngine:
     def __init__(
         self,
         db_client: DbClient,

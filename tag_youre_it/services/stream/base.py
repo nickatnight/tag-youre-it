@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
-from typing import AsyncIterator, Optional, Type, TypeVar, Union
+from abc import ABCMeta, abstractmethod
+from typing import AsyncIterator, Generic, Optional, TypeVar
 
 import asyncpraw
 from asyncpraw.models.base import AsyncPRAWBase
@@ -9,13 +9,17 @@ DbType = TypeVar("DbType")
 
 ModelType = TypeVar("ModelType")
 SchemaType = TypeVar("SchemaType")
+PrawType = TypeVar("PrawType", bound=AsyncPRAWBase)
 
 
-class AbstractStream(ABC):
+class AbstractStream(Generic[PrawType], metaclass=ABCMeta):
     """interface to stream different Reddit objects Comments, Messaging, etc"""
 
+    def __init__(self, subreddit_name: str) -> None:
+        self.subreddit_name: str = subreddit_name
+
     @abstractmethod
-    async def pre_flight_check(self, db_client: Type[DbType], obj: AsyncPRAWBase) -> bool:
+    async def pre_flight_check(self, db_client: DbType, obj: PrawType) -> bool:
         """check/process messages that were not comments
 
         these are private messages or things like mod mail
@@ -28,7 +32,7 @@ class AbstractStream(ABC):
 
     @abstractmethod
     async def process(
-        self, db_client: Type[DbType], obj: AsyncPRAWBase, game_id: Optional[str]
+        self, db_client: DbType, obj: PrawType, game_id: Optional[str]
     ) -> Optional[str]:
         """process Reddit object since this was most likely a 'tag' message
 
@@ -40,9 +44,7 @@ class AbstractStream(ABC):
         ...
 
     @abstractmethod
-    def stream(
-        self, reddit: asyncpraw.Reddit
-    ) -> AsyncIterator[Union["asyncpraw.models.Comment", "asyncpraw.models.Message"]]:
+    def stream(self, reddit: asyncpraw.Reddit) -> AsyncIterator[PrawType]:
         """stream incoming Reddit objects
 
         :param reddit:              Main Reddit wrapper object

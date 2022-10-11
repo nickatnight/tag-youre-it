@@ -29,7 +29,7 @@ services:
     command: |
         bash -c "
         while !</dev/tcp/db/5432; do sleep 1; done;
-        python3 ./play.py"
+        python3 play.py"
     depends_on:
       - db
     environment:

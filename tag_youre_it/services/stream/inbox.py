@@ -1,44 +1,34 @@
 import logging
-from typing import Optional
+from typing import AsyncIterator, Optional
 
 from asyncpraw import Reddit
-from asyncpraw.models.base import AsyncPRAWBase
+from asyncpraw.models import Message
 
 from tag_youre_it.core.clients import DbClient
-from tag_youre_it.core.const import (  # COMMENT_REPLY_YOURE_IT,; CURRENT_ACTIVE_GAME,
-    UNABLE_TO_TAG_SELF,
-    USER_OPTS_OUT_GAME,
-    USER_OPTS_OUT_GAME_INFO,
-    WELCOME_BACK,
-    TagEnum,
-)
+from tag_youre_it.core.config import settings
+from tag_youre_it.core.const import ReplyEnum, TagEnum
 from tag_youre_it.services import AbstractStream
 
 
 logger = logging.getLogger(__name__)
 
 
-class InboxStreamService(AbstractStream):
-    async def pre_flight_check(self, db_client: DbClient, obj: AsyncPRAWBase) -> bool:
+class InboxStreamService(AbstractStream[Message]):
+    async def pre_flight_check(self, db_client: DbClient, obj: Message) -> bool:
         author = obj.author
-        await author.load()
+        await author.load()  # Re-fetches the object
 
         author_name = author.name
         logger.info(f"Reading mention from [{author_name}]")
 
-        if obj.new is False:  # can probably delete this
-            logger.info("skipping read message")
-            return False
-
         if obj.was_comment is False:
-
             # user previously opted out and wants to play again
             enable_check = TagEnum.ENABLE_PHRASE == obj.subject.title().lower()
             opted_out_check1 = author_name in await db_client.player.list_opted_out()
 
             if all([enable_check, opted_out_check1]):
                 await db_client.player.set_opted_out(author.id, False)
-                await obj.reply(WELCOME_BACK.format(author=author_name))
+                await obj.reply(ReplyEnum.welcome_back(author=author_name))
 
             # user wants to opt of playing
             disable_check = TagEnum.DISABLE_PHRASE == obj.subject.title().lower()
@@ -46,15 +36,26 @@ class InboxStreamService(AbstractStream):
 
             if all([disable_check, opted_out_check2]):
                 await db_client.player.set_opted_out(author.id, True)
-                await obj.reply(USER_OPTS_OUT_GAME_INFO.format(author=author_name))
+                await obj.reply(ReplyEnum.user_opts_out_info(author=author_name))
 
             await obj.mark_read()
+            return False
+
+        mention_subreddit = obj.subreddit
+        await mention_subreddit.load()
+
+        # check if mention is not from the streams subreddit
+        if mention_subreddit.display_name != self.subreddit_name:
+            logger.warning(
+                f"SubReddit[{self.subreddit_name}] does not match mention "
+                f"SubReddit: {mention_subreddit.display_name}...skipping"
+            )
             return False
 
         return True
 
     async def process(
-        self, db_client: DbClient, obj: AsyncPRAWBase, game_id: Optional[str]
+        self, db_client: DbClient, obj: Message, game_id: Optional[str]
     ) -> Optional[str]:
 
         if TagEnum.KEY in obj.body.lower():
@@ -67,15 +68,21 @@ class InboxStreamService(AbstractStream):
             author = parent.author  # the person who got tagged
             await author.load()
 
+            # prevent user from tagging bot
+            if author.name == settings.USERNAME:
+                logger.info(f"Player [{mention_author}] tried tagging bot")
+                await obj.reply(ReplyEnum.unable_to_tag_bot())
+                return game_id
+
             # prevent user from tagging self
             if author.id == mention_author.id:
-                logger.info("user tried tagging themself")
-                await obj.reply(UNABLE_TO_TAG_SELF)
+                logger.info(f"Player [{mention_author}] tried tagging themself")
+                await obj.reply(ReplyEnum.unable_to_tag_self())
                 return game_id
 
             if author.name in await db_client.player.list_opted_out():
                 logger.info(f"Player [{author.name}] has opted out.")
-                await obj.reply(USER_OPTS_OUT_GAME.format(author=author.name))
+                await obj.reply(ReplyEnum.user_opts_out(author=author.name))
                 return
 
             # a game is currently being played
@@ -101,5 +108,5 @@ class InboxStreamService(AbstractStream):
 
             # await self.db_client.game.add_player()
 
-    def stream(self, reddit: Reddit):
+    def stream(self, reddit: Reddit) -> AsyncIterator[Message]:
         return reddit.inbox.stream()

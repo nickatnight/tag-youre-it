@@ -12,6 +12,7 @@ from tag_youre_it.models import BaseModel
 class SubRedditBase(SQLModel):
     name: str = Field(default=None)
     sub_id: str = Field(default=None)
+    display_name: str = Field(default=None)
 
 
 class SubReddit(BaseModel, SubRedditBase, table=True):
