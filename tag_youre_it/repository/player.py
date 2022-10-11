@@ -17,6 +17,7 @@ class PlayerRepository(AbstractRepository[Player, IPlayerCreate, IPlayerUpdate])
     async def list_opted_out(self) -> List[Player]:
         statement = select(self.model).where(self.model.opted_out == True)  # noqa
         results = await self.db.execute(statement)
+
         return results.scalars().all()
 
     async def set_opted_out(self, reddit_id: str) -> List[Player]:

@@ -8,6 +8,9 @@
     <a href="https://github.com/nickatnight/tag-youre-it/releases">
         <img alt="Release Status" src="https://img.shields.io/github/v/release/nickatnight/tag-youre-it">
     </a>
+    <a href="https://github.com/nickatnight/tag-youre-it/blob/master/LICENSE">
+        <img alt="License Shield" src="https://img.shields.io/github/license/nickatnight/tag-youre-it">
+    </a>
 </p>
 
 <p align="center">
@@ -18,7 +21,7 @@
 Play virutal tag with other users on Reddit
 
 ## How To Play
-For now, this bot will only support subreddit-level play, one active game per sub (See the TODO for future enhancements):
+For now, this bot will only support subreddit-level play (one active game per sub). This prevents trolls from locking a global game to a (private)subreddit (See the TODO for future enhancements):
 
 Invoke `u/TagYoureItBot` by replying to a Reddit post or comment with the phrase `!tag`. 1 of 2 things can happen:
 - There is no active game. `u/TagYoureItBot` will reply to the same post or comment notifying the author they are now "it". A countdown will start and this author will have an alloted time to "tag" another Reddit user (within the same sub). If the countdown expires and the auther has not tagged another user, the game will end. Otherwise...
@@ -63,15 +66,19 @@ $ tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py
 ```
 
 ## TODO
-- ~github action for ci/cd workflow~ [#2]
+- ~github action for ci/cd workflow~ [#2](https://github.com/nickatnight/tag-youre-it/pull/2)
 - move db client to stream service init
 - check for downvotes on recent comments
 - extra `CommentStreamService` to stream incoming comments from sub
-- ~add simple tests~ [#3] [#9]
+- ~add simple tests~ [#3](https://github.com/nickatnight/tag-youre-it/pull/3) [#9](https://github.com/nickatnight/tag-youre-it/pull/9)
 - public web api
 - frontend (gameplay stats)
 - multi subreddit play (basically all subs)
-- tag back flag
+- "tag back" flag
 - add exception handling
-- ~add docker compose for local testing/dev~ [#5]
+- ~add docker compose for local testing/dev~ [#6](https://github.com/nickatnight/tag-youre-it/pull/6)
 - increase coverage to sensible percentage
+- refactor DbClient and AbstractRepository
+- setup mypy
+- ~add subreddit check when stream processing~
+- finish process() logic

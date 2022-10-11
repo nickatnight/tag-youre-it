@@ -12,7 +12,7 @@ from sqlmodel import SQLModel
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
-from tag_youre_it.core.clients import get_db_url  # noqa
+from tag_youre_it.core.db import get_db_url  # noqa
 from tag_youre_it.models import *  # noqa
 
 
