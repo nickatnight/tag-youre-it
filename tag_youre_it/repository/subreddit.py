@@ -1,6 +1,7 @@
 import logging
 from typing import Optional
 
+from asyncpraw.models import Subreddit as PrawSubReddit
 from sqlmodel import select
 
 from tag_youre_it.models import SubReddit
@@ -14,32 +15,19 @@ logger: logging.Logger = logging.getLogger(__name__)
 class SubRedditRepository(AbstractRepository[SubReddit, ISubRedditCreate, ISubRedditUpdate]):
     model = SubReddit
 
-    async def get_or_create(
-        self, obj: ISubRedditCreate, add: bool = True, flush: bool = True, commit: bool = False
-    ) -> SubReddit:
-        statement = select(self.model).where(self.model.name == obj.name)
+    async def get_or_create(self, reddit_obj: PrawSubReddit) -> SubReddit:
+        statement = select(self.model).where(self.model.name == reddit_obj.name)
         result = await self.db.execute(statement)
         instance: Optional[SubReddit] = result.scalar_one_or_none()
 
         if instance:
             return instance
 
-        else:
-            instance = self.model.from_orm(obj)
-
-        # You'll usually want to add to the self.db
-        if add:
-            self.db.add(instance)
-
-        # Navigate these with caution
-        if add and commit:
-            try:
-                await self.db.commit()
-            except Exception as exc:
-                logger.error(exc)
-                await self.db.rollback()
-
-        elif add and flush:
-            await self.db.flush()
+        subreddit_obj = ISubRedditCreate(
+            name=reddit_obj.name,
+            sub_id=reddit_obj.id,
+            display_name=reddit_obj.display_name,
+        )
+        instance = await self.insert(subreddit_obj)
 
         return instance

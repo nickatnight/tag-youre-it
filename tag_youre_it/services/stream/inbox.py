@@ -2,11 +2,13 @@ import logging
 from typing import AsyncIterator, Optional
 
 from asyncpraw import Reddit
-from asyncpraw.models import Message
+from asyncpraw.models import Message, Redditor
+from asyncpraw.models import Subreddit as PrawSubReddit
 
 from tag_youre_it.core.clients import DbClient
 from tag_youre_it.core.config import settings
 from tag_youre_it.core.const import ReplyEnum, TagEnum
+from tag_youre_it.models import Game, Player, SubReddit
 from tag_youre_it.services import AbstractStream
 
 
@@ -59,30 +61,32 @@ class InboxStreamService(AbstractStream[Message]):
     ) -> Optional[str]:
 
         if TagEnum.KEY in obj.body.lower():
-            mention_author = obj.author  # the person tagging
+            mention_author: Redditor = obj.author  # the person tagging
             await mention_author.load()
+            tagger: Player = await db_client.player.get_or_create(mention_author)
 
             parent = await obj.parent()
             await parent.load()
-
-            author = parent.author  # the person who got tagged
+            author: Redditor = parent.author  # the person who got tagged
             await author.load()
+            tagee: Player = await db_client.player.get_or_create(author)
 
-            # prevent user from tagging bot
-            if author.name == settings.USERNAME:
-                logger.info(f"Player [{mention_author}] tried tagging bot")
+            # prevent tagger from tagging bot
+            if tagee.username == settings.USERNAME:
+                logger.info(f"Player [{tagger.username}] tried tagging bot")
                 await obj.reply(ReplyEnum.unable_to_tag_bot())
                 return game_id
 
-            # prevent user from tagging self
-            if author.id == mention_author.id:
-                logger.info(f"Player [{mention_author}] tried tagging themself")
+            # prevent tagger from tagging self
+            if tagee.reddit_id == tagger.reddit_id:
+                logger.info(f"Player [{tagger.username}] tried tagging themself")
                 await obj.reply(ReplyEnum.unable_to_tag_self())
                 return game_id
 
-            if author.name in await db_client.player.list_opted_out():
-                logger.info(f"Player [{author.name}] has opted out.")
-                await obj.reply(ReplyEnum.user_opts_out(author=author.name))
+            # prevent an opted out user from participating in game
+            if tagee.username in await db_client.player.list_opted_out():
+                logger.info(f"Player [{tagee.username}] has opted out.")
+                await obj.reply(ReplyEnum.user_opts_out(author=tagee.username))
                 return game_id
 
             # a game is currently being played
@@ -95,18 +99,15 @@ class InboxStreamService(AbstractStream[Message]):
             #     await obj.reply(CURRENT_ACTIVE_GAME.format(author=author.name))
             #     return inserted_game
 
-            # game = self.db_client.game.create()
-            # game_data = GameSchema()
-            # inserted_game = await db["game_collection"].insert_one(game_data.dict())
-            # g = await db["game_collection"].find_one({"_id": ObjectId(inserted_game.inserted_id)})
-            # players = g.get("players").copy()
+            # there is no active game, so start a new one
+            mention_subreddit: PrawSubReddit = obj.subreddit
+            await mention_subreddit.load()
 
-            # await parent.reply(COMMENT_REPLY_YOURE_IT.format(author=obj.author.name))
+            subreddit: SubReddit = await db_client.subreddit.get_or_create(mention_subreddit)
+            game: Game = await db_client.game.create(subreddit, tagger, tagee)
+            await parent.reply(ReplyEnum.comment_reply_tag(tagger.username))
 
-            # # upsert
-            # await self.db_client.player.insert(author)
-
-            # await self.db_client.game.add_player()
+            return str(game.id)
 
         return game_id
 

@@ -9,7 +9,7 @@ from tag_youre_it.models.base import BaseModel
 
 class PlayerBase(SQLModel):
     reddit_id: str = Field(..., description="The ID of the Redditor.")
-    reddit_username: str = Field(..., description="The Redditor’s username.")
+    username: str = Field(..., description="The Redditor’s username.")
     icon_img: str = Field(..., description="The url of the Redditors’ avatar.")
     opted_out: bool = Field(...)
     is_it: bool = Field(...)
@@ -29,7 +29,7 @@ class PlayerBase(SQLModel):
         schema_extra = {
             "example": {
                 "reddit_id": "1234-43143-3134-13423",
-                "reddit_username": "nny218",
+                "username": "nny218",
                 "icon_img": "reddit.com",
                 "opted_out": False,
                 "is_it": True,
