@@ -28,11 +28,13 @@ jobs:
           poetry install
         env:
           POETRY_VIRTUALENVS_CREATE: true
+      - name: MyPy
+        run: poetry run mypy tag_youre_it/
       - name: Black
         run: poetry run black tag_youre_it --check
       - name: Flake8
         run: poetry run flake8 tag_youre_it
-      - name: run coverage
+      - name: Coverage
         run: poetry run pytest --cov-report xml --cov=tag_youre_it tests/
       - name: Codecov
         if: success()

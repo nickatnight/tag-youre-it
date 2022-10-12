@@ -79,6 +79,6 @@ $ tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py
 - ~add docker compose for local testing/dev~ [#6](https://github.com/nickatnight/tag-youre-it/pull/6)
 - increase coverage to sensible percentage
 - refactor DbClient and AbstractRepository
-- setup mypy
-- ~add subreddit check when stream processing~
+- ~setup mypy~ [#14](https://github.com/nickatnight/tag-youre-it/pull/14)
+- ~add subreddit check when stream processing~ [#12](https://github.com/nickatnight/tag-youre-it/pull/12)
 - finish process() logic

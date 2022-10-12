@@ -1,15 +1,22 @@
+from typing import Optional
 from uuid import UUID
 
-from tag_youre_it.models.subreddit import SubRedditBase
+from sqlmodel import SQLModel
 
 
-class ISubRedditCreate(SubRedditBase):
+class ISubRedditBase(SQLModel):
+    name: Optional[str] = None
+    sub_id: Optional[str] = None
+    display_name: Optional[str] = None
+
+
+class ISubRedditCreate(ISubRedditBase):
     pass
 
 
-class ISubRedditRead(SubRedditBase):
+class ISubRedditRead(ISubRedditBase):
     id: UUID
 
 
-class ISubRedditUpdate(SubRedditBase):
+class ISubRedditUpdate(SQLModel):
     pass

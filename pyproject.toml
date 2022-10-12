@@ -25,6 +25,8 @@ asyncpg = "^0.26.0"
 alembic = "^1.8.1"
 pytest-asyncio = "^0.19.0"
 pytest-mock = "^3.10.0"
+mypy = "^0.982"
+types-emoji = "^2.1.0"
 
 [tool.isort]
 multi_line_output = 3
@@ -37,6 +39,27 @@ sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
 line-length = 100
 include = '\.pyi?$'
 extend-exclude = '(\.git|\.hg|\.mypy_cache|\.tox|\.venv|_build|migrations)'
+
+[tool.mypy]
+# --strict
+disallow_any_generics = true
+disallow_subclassing_any = true 
+disallow_untyped_calls = true 
+disallow_untyped_defs = true
+disallow_incomplete_defs = true 
+check_untyped_defs = true 
+disallow_untyped_decorators = true 
+no_implicit_optional = true
+warn_redundant_casts = true 
+warn_unused_ignores = true
+warn_return_any = true 
+implicit_reexport = false
+strict_equality = true
+# --strict end
+
+[[tool.mypy.overrides]]
+module = "asyncpraw.*"
+ignore_missing_imports = true
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

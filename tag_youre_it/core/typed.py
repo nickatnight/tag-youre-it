@@ -1,4 +1,4 @@
-from typing import Dict, Optional, TypedDict
+from typing import Any, Dict, Optional, TypedDict
 
 
 class RedditClientConfigTyped(TypedDict):
@@ -7,4 +7,4 @@ class RedditClientConfigTyped(TypedDict):
     username: str
     password: str
     user_agent: str
-    requestor_kwargs: Optional[Dict]
+    requestor_kwargs: Optional[Dict[str, Any]]

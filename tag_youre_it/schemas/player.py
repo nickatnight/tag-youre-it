@@ -2,18 +2,25 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
-from tag_youre_it.models.player import PlayerBase
+from sqlmodel import SQLModel
 
 
-class IPlayerCreate(PlayerBase):
+class IPlayerBase(SQLModel):
+    reddit_id: Optional[str] = None
+    reddit_username: Optional[str] = None
+    icon_img: Optional[str] = None
+    opted_out: Optional[bool] = False
+    is_it: Optional[bool] = False
+    is_employee: Optional[bool] = False
+
+
+class IPlayerCreate(IPlayerBase):
     pass
 
 
-class IPlayerRead(PlayerBase):
+class IPlayerRead(IPlayerBase):
     id: UUID
 
 
-class IPlayerUpdate(PlayerBase):
-    is_it: Optional[bool] = None
-    opted_out: Optional[bool] = None
-    updated_at: Optional[datetime] = None
+class IPlayerUpdate(IPlayerBase):
+    created_utc: Optional[datetime] = None
