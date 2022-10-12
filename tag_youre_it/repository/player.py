@@ -32,7 +32,7 @@ class PlayerRepository(AbstractRepository[Player, IPlayerCreate, IPlayerUpdate])
         await self.db.commit()
         await self.db.refresh(player)
 
-        logger.info(f"{player.username} opted out of playing.")
+        logger.info(f"[{player.username}] opted out of playing.")
 
     async def get_or_create(self, reddit_obj: Redditor) -> Player:
         statement = select(self.model).where(self.model.username == reddit_obj.name)
@@ -43,9 +43,12 @@ class PlayerRepository(AbstractRepository[Player, IPlayerCreate, IPlayerUpdate])
             return instance
 
         player_obj = IPlayerCreate(
-            name=reddit_obj.name,
-            sub_id=reddit_obj.id,
-            display_name=reddit_obj.display_name,
+            username=reddit_obj.name,
+            reddit_id=reddit_obj.id,
+            icon_img=reddit_obj.icon_img,
+            opted_out=False,
+            is_it=False,
+            is_employee=reddit_obj.is_employee,
         )
         instance = await self.insert(player_obj)
 
