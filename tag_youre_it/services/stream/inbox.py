@@ -32,7 +32,7 @@ class InboxStreamService(AbstractStream[Message]):
 
             # user wants to opt of playing
             disable_check = TagEnum.DISABLE_PHRASE == obj.subject.title().lower()
-            opted_out_check2 = author_name not in db_client.player.list_opted_out()
+            opted_out_check2 = author_name not in await db_client.player.list_opted_out()
 
             if all([disable_check, opted_out_check2]):
                 await db_client.player.set_opted_out(author.id, True)
@@ -83,7 +83,7 @@ class InboxStreamService(AbstractStream[Message]):
             if author.name in await db_client.player.list_opted_out():
                 logger.info(f"Player [{author.name}] has opted out.")
                 await obj.reply(ReplyEnum.user_opts_out(author=author.name))
-                return
+                return game_id
 
             # a game is currently being played
             # if game_id is not None:
@@ -108,5 +108,9 @@ class InboxStreamService(AbstractStream[Message]):
 
             # await self.db_client.game.add_player()
 
+        return game_id
+
     def stream(self, reddit: Reddit) -> AsyncIterator[Message]:
-        return reddit.inbox.stream()
+        s: AsyncIterator[Message] = reddit.inbox.stream()
+
+        return s

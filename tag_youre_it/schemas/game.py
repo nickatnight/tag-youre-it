@@ -1,18 +1,23 @@
 from typing import List, Optional
 from uuid import UUID
 
-from tag_youre_it.models.game import GameBase
+from sqlmodel import SQLModel
+
 from tag_youre_it.models.player import Player
 
 
-class IGameCreate(GameBase):
+class IGameBase(SQLModel):
+    players: Optional[List[Player]] = []
+    is_active: Optional[bool] = None
+
+
+class IGameCreate(IGameBase):
     pass
 
 
-class IGameRead(GameBase):
+class IGameRead(IGameBase):
     id: UUID
 
 
-class IGameUpdate(GameBase):
-    players: Optional[List[Player]]
-    is_active: Optional[bool]
+class IGameUpdate(IGameBase):
+    pass

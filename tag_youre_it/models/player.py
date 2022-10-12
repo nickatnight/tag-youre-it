@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import Optional
 
 from pydantic import BaseConfig, validator
 from sqlmodel import Column, DateTime, Field, SQLModel
@@ -7,17 +8,18 @@ from tag_youre_it.models.base import BaseModel
 
 
 class PlayerBase(SQLModel):
-    reddit_id: str = Field(...)
-    reddit_username: str = Field(...)
-    icon_img: str = Field(...)
+    reddit_id: str = Field(..., description="The ID of the Redditor.")
+    reddit_username: str = Field(..., description="The Redditor’s username.")
+    icon_img: str = Field(..., description="The url of the Redditors’ avatar.")
     opted_out: bool = Field(...)
     is_it: bool = Field(...)
-    is_employee: bool = Field(...)
+    is_employee: bool = Field(..., description="Whether or not the Redditor is a Reddit employee.")
     created_utc: datetime = Field(
         sa_column=Column(
             DateTime(timezone=True),
             nullable=False,
-        )
+        ),
+        description="Time the account was created, represented in Unix Time.",
     )
 
     class Config(BaseConfig):
@@ -39,9 +41,9 @@ class PlayerBase(SQLModel):
 
 class Player(BaseModel, PlayerBase, table=True):
     @validator("created_at", pre=True, always=True)
-    def set_created_at_now(cls, v):
+    def set_created_at_now(cls, v: Optional[datetime] = None) -> datetime:
         return v or datetime.now(timezone.utc)
 
     @validator("updated_at", pre=True, always=True)
-    def set_updated_at_now(cls, v):
-        return v or datetime.now(timezone.utc)
+    def set_updated_at_now(cls, _: Optional[datetime] = None) -> datetime:
+        return datetime.now(timezone.utc)

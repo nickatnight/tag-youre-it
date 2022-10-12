@@ -20,12 +20,12 @@ class PlayerRepository(AbstractRepository[Player, IPlayerCreate, IPlayerUpdate])
 
         return results.scalars().all()
 
-    async def set_opted_out(self, reddit_id: str) -> List[Player]:
+    async def set_opted_out(self, reddit_id: str, value: bool) -> None:
         statement = select(self.model).where(self.model.reddit_id == reddit_id)
         results = await self.db.execute(statement)
-        player: Player = results.one()
+        player: Player = results.scalar_one()
 
-        player.opted_out = True
+        player.opted_out = value
         self.db.add(player)
         await self.db.commit()
         await self.db.refresh(player)

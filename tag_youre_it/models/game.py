@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseConfig, validator
 from sqlmodel import Field, Relationship, SQLModel
@@ -12,7 +12,7 @@ class GameBase(SQLModel):
     players: List["Player"] = Relationship(
         back_populates="game", sa_relationship_kwargs={"lazy": "selectin"}
     )
-    is_active: bool = Field(...)
+    is_active: bool = Field(..., description="Is the Game active or not.")
     # TODO: add subreddit
 
     class Config(BaseConfig):
@@ -29,9 +29,9 @@ class GameBase(SQLModel):
 
 class Game(BaseModel, GameBase, table=True):
     @validator("created_at", pre=True, always=True)
-    def set_created_at_now(cls, v):
+    def set_created_at_now(cls, v: Optional[datetime] = None) -> datetime:
         return v or datetime.now(timezone.utc)
 
     @validator("updated_at", pre=True, always=True)
-    def set_updated_at_now(cls, v):
-        return v or datetime.now(timezone.utc)
+    def set_updated_at_now(cls, _: Optional[datetime] = None) -> datetime:
+        return datetime.now(timezone.utc)

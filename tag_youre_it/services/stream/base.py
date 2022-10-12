@@ -1,11 +1,9 @@
 from abc import ABCMeta, abstractmethod
-from typing import AsyncIterator, Generic, Optional, TypeVar
+from typing import Any, AsyncIterator, Generic, Optional, TypeVar
 
 import asyncpraw
 from asyncpraw.models.base import AsyncPRAWBase
 
-
-DbType = TypeVar("DbType")
 
 ModelType = TypeVar("ModelType")
 SchemaType = TypeVar("SchemaType")
@@ -19,7 +17,7 @@ class AbstractStream(Generic[PrawType], metaclass=ABCMeta):
         self.subreddit_name: str = subreddit_name
 
     @abstractmethod
-    async def pre_flight_check(self, db_client: DbType, obj: PrawType) -> bool:
+    async def pre_flight_check(self, db_client: Any, obj: PrawType) -> bool:
         """check/process messages that were not comments
 
         these are private messages or things like mod mail
@@ -31,9 +29,7 @@ class AbstractStream(Generic[PrawType], metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    async def process(
-        self, db_client: DbType, obj: PrawType, game_id: Optional[str]
-    ) -> Optional[str]:
+    async def process(self, db_client: Any, obj: PrawType, game_id: Optional[str]) -> Optional[str]:
         """process Reddit object since this was most likely a 'tag' message
 
         :param db_client:           database client for interacting with database

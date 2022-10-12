@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import Optional
 
 from pydantic import validator
 from sqlmodel import Field, SQLModel
@@ -17,9 +18,9 @@ class SubRedditBase(SQLModel):
 
 class SubReddit(BaseModel, SubRedditBase, table=True):
     @validator("created_at", pre=True, always=True)
-    def set_created_at_now(cls, v):
+    def set_created_at_now(cls, v: Optional[datetime] = None) -> datetime:
         return v or datetime.now(timezone.utc)
 
     @validator("updated_at", pre=True, always=True)
-    def set_updated_at_now(cls, v):
+    def set_updated_at_now(cls, v: Optional[datetime] = None) -> datetime:
         return v or datetime.now(timezone.utc)

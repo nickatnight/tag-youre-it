@@ -15,17 +15,16 @@ if __name__ == "__main__":
     from tag_youre_it.core.const import SupportedSubs
     from tag_youre_it.core.db import async_session
     from tag_youre_it.repository import (
-        AbstractRepository,
         GameRepository,
         PlayerRepository,
         SubRedditRepository,
     )
     from tag_youre_it.services import InboxStreamService
 
-    player: AbstractRepository = PlayerRepository(async_session())
-    game: AbstractRepository = GameRepository(async_session())
-    subreddit: AbstractRepository = SubRedditRepository(async_session())
-    config: RedditClientConfigTyped = {
+    player: PlayerRepository = PlayerRepository(async_session())
+    game: GameRepository = GameRepository(async_session())
+    subreddit: SubRedditRepository = SubRedditRepository(async_session())
+    config: RedditClientConfigTyped = {  # type: ignore
         "client_id": settings.CLIENT_ID,
         "client_secret": settings.CLIENT_SECRET,
         "username": settings.USERNAME,

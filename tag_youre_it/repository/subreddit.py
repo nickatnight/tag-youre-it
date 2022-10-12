@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 
 from sqlmodel import select
 
@@ -18,7 +19,7 @@ class SubRedditRepository(AbstractRepository[SubReddit, ISubRedditCreate, ISubRe
     ) -> SubReddit:
         statement = select(self.model).where(self.model.name == obj.name)
         result = await self.db.execute(statement)
-        instance = result.scalar_one_or_none()
+        instance: Optional[SubReddit] = result.scalar_one_or_none()
 
         if instance:
             return instance
@@ -36,7 +37,7 @@ class SubRedditRepository(AbstractRepository[SubReddit, ISubRedditCreate, ISubRe
                 await self.db.commit()
             except Exception as exc:
                 logger.error(exc)
-                self.db.rollback()
+                await self.db.rollback()
 
         elif add and flush:
             await self.db.flush()

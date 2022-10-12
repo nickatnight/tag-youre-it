@@ -58,7 +58,7 @@ strict_equality = true
 # --strict end
 
 [[tool.mypy.overrides]]
-module = "asyncpraw"
+module = "asyncpraw.*"
 ignore_missing_imports = true
 
 [build-system]
