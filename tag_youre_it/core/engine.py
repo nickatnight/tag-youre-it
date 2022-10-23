@@ -1,9 +1,11 @@
 import copy
 import logging
 from typing import Optional, Union
+from uuid import UUID
 
 import asyncpraw
 from aiohttp import ClientSession
+from sqlmodel import select
 
 from tag_youre_it.core.clients import DbClient
 from tag_youre_it.core.config import settings
@@ -23,6 +25,8 @@ logger = logging.getLogger(__name__)
 #               __/ |
 #              |___/
 class GameEngine:
+    """main class for game...max one instance of GameEngine per Subreddit"""
+
     def __init__(
         self,
         db_client: DbClient,
@@ -46,12 +50,18 @@ class GameEngine:
                     },  # must successfully close the session when finished
                 }
             )
-            game_id: Optional[str] = ""
+            game_id: Optional[Union[UUID, str]] = None
             db: DbClient = self.db_client
 
             async with asyncpraw.Reddit(**self.reddit_config) as reddit:
                 logger.info(f"Streaming mentions for u/{settings.USERNAME}")
+                # TODO: get first active game of subreddit here
+                results = await db.game.db.execute(
+                    select(db.game.model).where(db.game.model.id == 1)
+                )
+                game = results.scalar_one()
 
+                logger.info(f"GAMEPLAYERS=====; {game.players}")
                 async for mention in self.stream_service.stream(reddit):
 
                     pre_flight_check: bool = await self.stream_service.pre_flight_check(db, mention)

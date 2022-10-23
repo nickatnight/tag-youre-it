@@ -10,8 +10,9 @@ class IPlayerBase(SQLModel):
     username: Optional[str] = None
     icon_img: Optional[str] = None
     opted_out: Optional[bool] = False
-    is_it: Optional[bool] = False
+    tag_time: Optional[datetime] = None
     is_employee: Optional[bool] = False
+    created_utc: Optional[datetime] = None
 
 
 class IPlayerCreate(IPlayerBase):
@@ -19,7 +20,7 @@ class IPlayerCreate(IPlayerBase):
 
 
 class IPlayerRead(IPlayerBase):
-    id: UUID
+    ref_id: UUID
 
 
 class IPlayerUpdate(IPlayerBase):

@@ -1,4 +1,7 @@
 import logging
+from typing import List
+
+from sqlmodel import select
 
 from tag_youre_it.models.game import Game
 from tag_youre_it.models.player import Player
@@ -11,5 +14,24 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class GameRepository(AbstractRepository[Game, IGameCreate, IGameUpdate]):
+    model = Game
+
     async def create(self, subreddit: SubReddit, tagger: Player, tagee: Player) -> Game:
-        pass
+        game_obj = Game(subreddit_id=subreddit.id, is_active=True, players=[tagger, tagee])
+        logger.info(f"GAME-OBJECT========: {game_obj}")
+        # player1_obj = IPlayerUpdate()
+        # await self.update(tagger, )
+        instance = await self.insert(game_obj, from_orm=False)
+        logger.info(f"NEW INSTANCE======{instance}")
+        return instance
+
+    async def active(self) -> List[Game]:
+        statement = (
+            select(self.model)
+            .where(self.model.is_active == True)  # noqa
+            .order_by(self.model.__table__.columns["created_at"].desc())
+        )
+        results = await self.db.execute(statement)
+        games: List[Game] = results.scalars().all()
+
+        return games

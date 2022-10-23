@@ -9,6 +9,7 @@ from tag_youre_it.models.player import Player
 class IGameBase(SQLModel):
     players: Optional[List[Player]] = []
     is_active: Optional[bool] = None
+    subreddit_id: Optional[int] = None
 
 
 class IGameCreate(IGameBase):
@@ -16,7 +17,7 @@ class IGameCreate(IGameBase):
 
 
 class IGameRead(IGameBase):
-    id: UUID
+    ref_id: UUID
 
 
 class IGameUpdate(IGameBase):

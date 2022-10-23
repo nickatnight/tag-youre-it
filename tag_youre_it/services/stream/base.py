@@ -11,7 +11,7 @@ PrawType = TypeVar("PrawType", bound=AsyncPRAWBase)
 
 
 class AbstractStream(Generic[PrawType], metaclass=ABCMeta):
-    """interface to stream different Reddit objects Comments, Messaging, etc"""
+    """interface to stream Reddit Comments, Messaging, etc from a particular Subreddit"""
 
     def __init__(self, subreddit_name: str) -> None:
         self.subreddit_name: str = subreddit_name

@@ -21,9 +21,9 @@
 Play virtual tag with other users on Reddit
 
 ## How To Play
-For now, this bot will only support subreddit-level play (one active game per sub). This prevents trolls from locking a global game to a (private)subreddit (See the TODO for future enhancements):
+For now, this bot will only supports subreddit-level play (one active game per sub). This prevents trolls from locking a global game to a (private)subreddit (See the TODO for future enhancements):
 
-Invoke `u/TagYoureItBot` by replying to a Reddit post or comment with the phrase `!tag`. 1 of 2 things can happen:
+Invoke `u/TagYoureItBot` by replying to a Reddit post or comment with the phrase `!tag` e.g. `u/TagYoureItBot !tag`. 1 of 2 things can happen:
 - There is no active game. `u/TagYoureItBot` will reply to the same post or comment notifying the author they are now "it". A countdown will start and this author will have an allotted time to "tag" another Reddit user (within the same sub). If the countdown expires and the author has not tagged another user, the game will end. Otherwise...
 - There is an active game. If you are the "it" user, the game will continue (see previous paragraph). If you're not it, the bot will reply to your comment stating such. The comment will include a countdown time of how much longer the current tagged user has to tag someone until the game automatically ends.
 
@@ -40,9 +40,13 @@ To opt out of playing, send `u/TagYoureItBot` a private message which contains '
 If you would like to opt back in, send `u/TagYoureItBot` a private message with 'i want to play tag again' as the subject
 
 ## Why did I build this?
-A few years ago I read a [reddit blog post](https://www.redditinc.com/blog/how-we-built-rplace/), where they outlined how r/Place was built. I got inspired by the community aspect of the project, and wanted to create something similar (obviously no where near the scale/volume). I pushed a closed source v1 last year, but the game logic was coupled to the web api code (FastApi). I decided to decompose the bot logic into an open source package and keep the web api closed source.
+a) A few years ago I read a [reddit blog post](https://www.redditinc.com/blog/how-we-built-rplace/), where they outlined how r/Place was built. I got inspired by the community aspect of the project, and wanted to create something similar (obviously no where near the scale/volume). I pushed a closed source v1 last year, but the game logic was coupled to the web api code (FastApi). I decided to decompose the bot logic into an open source package and keep the web api closed source.
 
-I'm also curious to see stats of user engagement (how long did a game chain last, how many users did it contain, which subreddit plays the most, etc)
+b) Want keep my Python skills fresh since I've been doing a lot of full-stack development in my current role (React/Java).
+
+c) Showcase the ecosystem of my open source projects and how they work together: [Create Release GHA](https://github.com/nickatnight/releases-action), [FastAPI Backend Base](https://github.com/nickatnight/fastapi-backend-base), [Reddit Bot Base](https://github.com/nickatnight/docker-reddit-bot-base).
+
+d) I'm curious to see stats of user engagement (how long did a game chain last, how many users did it contain, which subreddit plays the most, etc)
 
 See [r/TagYoureItBot](https://www.reddit.com/r/TagYoureItBot) for more updates.
 
@@ -85,6 +89,11 @@ Initialize first migration (project must be up with docker compose up and contai
 $ docker compose run --rm tag alembic revision --autogenerate -m "init"
 ```
 
+Create new migration file
+```shell
+$ docker compose run --rm tag alembic revision --autogenerate -m "add a new field or something cool"
+```
+
 Apply migrations
 ```shell
 $ docker compose run --rm tag alembic upgrade head
@@ -106,4 +115,4 @@ $ docker compose run --rm tag alembic upgrade head
 - refactor DbClient and AbstractRepository
 - ~setup mypy~ [#14](https://github.com/nickatnight/tag-youre-it/pull/14)
 - ~add subreddit check when stream processing~ [#12](https://github.com/nickatnight/tag-youre-it/pull/12)
-- finish process() logic
+- ~finish process() logic~

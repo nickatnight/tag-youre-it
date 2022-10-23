@@ -8,6 +8,7 @@ from tag_youre_it.models import BaseModel
 
 
 class SubRedditBase(SQLModel):
+    # TODO: add rest of fields
     name: str = Field(default=None, description="The database name of the subreddit")
     sub_id: str = Field(default=None, description="The Reddit Id of the subreddit")
     display_name: str = Field(default=None, description="The human friendly name of the subreddit")

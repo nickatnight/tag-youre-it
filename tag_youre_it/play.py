@@ -3,6 +3,8 @@ import logging
 import os
 
 
+# NOTE: this file should only be used for testing and local development
+
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 if __name__ == "__main__":
@@ -21,9 +23,10 @@ if __name__ == "__main__":
     )
     from tag_youre_it.services import InboxStreamService
 
-    player: PlayerRepository = PlayerRepository(async_session())
-    game: GameRepository = GameRepository(async_session())
-    subreddit: SubRedditRepository = SubRedditRepository(async_session())
+    sesh = async_session()
+    player: PlayerRepository = PlayerRepository(sesh)
+    game: GameRepository = GameRepository(sesh)
+    subreddit: SubRedditRepository = SubRedditRepository(sesh)
     config: RedditClientConfigTyped = {  # type: ignore
         "client_id": settings.CLIENT_ID,
         "client_secret": settings.CLIENT_SECRET,

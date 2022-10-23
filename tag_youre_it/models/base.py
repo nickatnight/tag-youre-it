@@ -6,9 +6,13 @@ from sqlmodel import Column, DateTime, Field, SQLModel
 
 
 class BaseModel(SQLModel):
-    id: uuid_pkg.UUID = Field(
-        default_factory=uuid_pkg.uuid4,
+    id: Optional[int] = Field(
+        default=None,
         primary_key=True,
+        index=True,
+    )
+    ref_id: uuid_pkg.UUID = Field(
+        default_factory=uuid_pkg.uuid4,
         index=True,
         nullable=False,
     )

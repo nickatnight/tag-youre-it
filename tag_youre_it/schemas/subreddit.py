@@ -15,7 +15,7 @@ class ISubRedditCreate(ISubRedditBase):
 
 
 class ISubRedditRead(ISubRedditBase):
-    id: UUID
+    ref_id: UUID
 
 
 class ISubRedditUpdate(SQLModel):

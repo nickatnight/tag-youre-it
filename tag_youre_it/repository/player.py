@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timezone
 from typing import List, Optional
 
 from asyncpraw.models import Redditor
@@ -46,10 +47,25 @@ class PlayerRepository(AbstractRepository[Player, IPlayerCreate, IPlayerUpdate])
             username=reddit_obj.name,
             reddit_id=reddit_obj.id,
             icon_img=reddit_obj.icon_img,
-            opted_out=False,
-            is_it=False,
             is_employee=reddit_obj.is_employee,
+            created_utc=reddit_obj.created_utc,
         )
         instance = await self.insert(player_obj)
+
+        return instance
+
+    async def untag(self, reddit_obj: Redditor):
+        instance = await self.get_or_create(reddit_obj)
+
+        player_obj = IPlayerUpdate(tag_time=None)
+        return await self.update(instance, player_obj)
+
+    async def tag(self, reddit_obj: Redditor):
+        instance = await self.get_or_create(reddit_obj)
+        instance.tag_time = datetime.now(timezone.utc)
+        logger.info(f"instance===== post tag: {instance}")
+        self.db.add(instance)
+        await self.db.commit()
+        await self.db.refresh(instance)
 
         return instance

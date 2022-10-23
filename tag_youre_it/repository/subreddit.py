@@ -28,6 +28,6 @@ class SubRedditRepository(AbstractRepository[SubReddit, ISubRedditCreate, ISubRe
             sub_id=reddit_obj.id,
             display_name=reddit_obj.display_name,
         )
-        instance = await self.insert(subreddit_obj)
 
+        instance = await self.insert(subreddit_obj)
         return instance

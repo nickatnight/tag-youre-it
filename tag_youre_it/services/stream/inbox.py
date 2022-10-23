@@ -1,5 +1,7 @@
 import logging
-from typing import AsyncIterator, Optional
+from datetime import datetime, timezone
+from typing import AsyncIterator, Optional, Union
+from uuid import UUID
 
 from asyncpraw import Reddit
 from asyncpraw.models import Message, Redditor
@@ -7,7 +9,7 @@ from asyncpraw.models import Subreddit as PrawSubReddit
 
 from tag_youre_it.core.clients import DbClient
 from tag_youre_it.core.config import settings
-from tag_youre_it.core.const import ReplyEnum, TagEnum
+from tag_youre_it.core.const import TAG_TIME, ReplyEnum, TagEnum
 from tag_youre_it.models import Game, Player, SubReddit
 from tag_youre_it.services import AbstractStream
 
@@ -49,65 +51,80 @@ class InboxStreamService(AbstractStream[Message]):
         # check if mention is not from the streams subreddit
         if mention_subreddit.display_name != self.subreddit_name:
             logger.warning(
-                f"SubReddit[{self.subreddit_name}] does not match mention "
-                f"SubReddit: {mention_subreddit.display_name}...skipping"
+                f"SubReddit[r/{self.subreddit_name}] does not match mention "
+                f"Subreddit: r/{mention_subreddit.display_name}...skipping"
             )
             return False
 
         return True
 
     async def process(
-        self, db_client: DbClient, obj: Message, game_id: Optional[str]
-    ) -> Optional[str]:
+        self, db_client: DbClient, obj: Message, game_id: Optional[Union[UUID, str]] = None
+    ) -> Optional[Union[UUID, str]]:
 
         if TagEnum.KEY in obj.body.lower():
+            mention_subreddit: PrawSubReddit = obj.subreddit
+            await mention_subreddit.load()
+
+            subreddit: SubReddit = await db_client.subreddit.get_or_create(mention_subreddit)
+            game: Optional[Game] = await db_client.current_game(subreddit)
+
             mention_author: Redditor = obj.author  # the person tagging
             await mention_author.load()
-            tagger: Player = await db_client.player.get_or_create(mention_author)
 
             parent = await obj.parent()
             await parent.load()
             author: Redditor = parent.author  # the person who got tagged
             await author.load()
-            tagee: Player = await db_client.player.get_or_create(author)
 
             # prevent tagger from tagging bot
-            if tagee.username == settings.USERNAME:
-                logger.info(f"Player [{tagger.username}] tried tagging bot")
+            if author.name == settings.USERNAME:
+                logger.info(f"Player [{mention_author.name}] tried tagging bot")
                 await obj.reply(ReplyEnum.unable_to_tag_bot())
                 return game_id
 
             # prevent tagger from tagging self
-            if tagee.reddit_id == tagger.reddit_id:
-                logger.info(f"Player [{tagger.username}] tried tagging themself")
+            if author.id == mention_author.id:
+                logger.info(f"Player [{mention_author.name}] tried tagging themself")
                 await obj.reply(ReplyEnum.unable_to_tag_self())
                 return game_id
 
             # prevent an opted out user from participating in game
-            if tagee.username in await db_client.player.list_opted_out():
-                logger.info(f"Player [{tagee.username}] has opted out.")
-                await obj.reply(ReplyEnum.user_opts_out(author=tagee.username))
+            if author.name in await db_client.player.list_opted_out():
+                logger.info(f"Player [{author.username}] has opted out.")
+                await obj.reply(ReplyEnum.user_opts_out(author=author.username))
                 return game_id
 
             # a game is currently being played
-            # if game_id is not None:
-            #     player = db_client.player.by_reddit_id(mention_author.id)
+            if game is not None:
+                tagger: Player = await db_client.player.get_or_create(mention_author)
+                tagee: Player = await db_client.player.get_or_create(author)
 
-            # if not player.is_it:
+                # is the tagger actually it?
+                if tagger.tag_time:
+                    tag_over_time: int = (
+                        datetime.now(timezone.utc) - tagger.tag_time
+                    ).total_seconds()
 
-            #     # TODO: get user who is currently it
-            #     await obj.reply(CURRENT_ACTIVE_GAME.format(author=author.name))
-            #     return inserted_game
+                    # player didn't tag anyone in allotted time, so end current game
+                    if tag_over_time > TAG_TIME:
+                        await db_client.reset_game(game.ref_id, tagger)
+                        await obj.reply(ReplyEnum.game_over(tag_over_time=tag_over_time))
+
+                    return None
+
+                logger.info(f"Current active game [{game.ref_id}, {game.players}].")
+                await obj.reply(ReplyEnum.active_game())
+                return game.ref_id
 
             # there is no active game, so start a new one
-            mention_subreddit: PrawSubReddit = obj.subreddit
-            await mention_subreddit.load()
-
-            subreddit: SubReddit = await db_client.subreddit.get_or_create(mention_subreddit)
+            tagger: Player = await db_client.player.untag(mention_author)
+            tagee: Player = await db_client.player.tag(author)
             game: Game = await db_client.game.create(subreddit, tagger, tagee)
-            await parent.reply(ReplyEnum.comment_reply_tag(tagger.username))
+            logger.info(f"PLAYERS=====: {game.players}")
+            await parent.reply(ReplyEnum.comment_reply_tag(mention_author.name))
 
-            return str(game.id)
+            return game.ref_id
 
         return game_id
 

@@ -1,9 +1,10 @@
 # flake8: noqa
 
 
-from os import stat
-
 from tag_youre_it.core.utils import _emojize
+
+
+TAG_TIME = 480  # seconds
 
 
 class TagEnum:
@@ -15,7 +16,7 @@ class TagEnum:
 COMMENT_REPLY_YOURE_IT = """
 Tag you're it!
 
-You have been tagged by u/{author}. Let's see how long we can keep this game going...you have 5 minutes to tag another user! They can be tagged by mentioning my username in a comment with '!tag' trigger. eg 'u/TagYoureItBot !tag'.
+You have been tagged by u/{author}. Let's see how long we can keep this game going...you have 5 minutes to tag another user! They can be tagged by mentioning my username in a comment with '!tag' trigger.
 
 If you haven't tagged anybody within the allotted time, the game will reset and break the chain. If you would like to opt out of playing, send me a private message with 'i dont want to play tag' as the subject (this will reset the game).
 """
@@ -46,11 +47,22 @@ WELCOME_BACK = """
 Welcome back to the game u/{author}! :wave:
 """
 
+GAME_OVER = """
+Sorry but you are {tag_over_time}s late to tag. A new game will start.
+"""
+
+FOOTER = (
+    "^^[&nbsp;how&nbsp;to&nbsp;use]"
+    "(https://www.reddit.com/r/TagYoureItBot/comments/pgmpsa/beta_version_release/)"
+    "&nbsp;|&nbsp;[creator](https://www.reddit.com/message/compose/?to=betazoid_one)"
+    "&nbsp;|&nbsp;[source&nbsp;code](https://github.com/nickatnight/tag-youre-it)"
+)
+
 
 class ReplyEnum:
     @staticmethod
     def _e(reply_string: str) -> str:
-        return _emojize(reply_string)
+        return _emojize(f"{reply_string}\n___\n{FOOTER}")
 
     @staticmethod
     def comment_reply_tag(author: str) -> str:
@@ -79,6 +91,10 @@ class ReplyEnum:
     @staticmethod
     def user_opts_out_info(author: str) -> str:
         return ReplyEnum._e(USER_OPTS_OUT_GAME_INFO.format(author=author))
+
+    @staticmethod
+    def game_over(tag_over_time: int) -> str:
+        return ReplyEnum._e(GAME_OVER.format(tag_over_time=tag_over_time))
 
 
 class SupportedSubs:
