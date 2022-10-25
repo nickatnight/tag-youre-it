@@ -65,12 +65,12 @@ Requires [Poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-inst
 ### Helpful commands
 Black
 ```shell
-$ poetry run black .
+$ poetry run black tag_youre_it/
 ```
 
 Flake8
 ```shell
-$ poetry run flake8
+$ poetry run flake8 tag_youre_it/
 ```
 
 Test
@@ -116,3 +116,6 @@ $ docker compose run --rm tag alembic upgrade head
 - ~setup mypy~ [#14](https://github.com/nickatnight/tag-youre-it/pull/14)
 - ~add subreddit check when stream processing~ [#12](https://github.com/nickatnight/tag-youre-it/pull/12)
 - ~finish process() logic~
+- decorator for yielding database sessions
+- add loader method for apraw objects
+- add flowchart

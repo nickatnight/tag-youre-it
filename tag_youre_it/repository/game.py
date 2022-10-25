@@ -17,12 +17,17 @@ class GameRepository(AbstractRepository[Game, IGameCreate, IGameUpdate]):
     model = Game
 
     async def create(self, subreddit: SubReddit, tagger: Player, tagee: Player) -> Game:
-        game_obj = Game(subreddit_id=subreddit.id, is_active=True, players=[tagger, tagee])
-        logger.info(f"GAME-OBJECT========: {game_obj}")
-        # player1_obj = IPlayerUpdate()
-        # await self.update(tagger, )
+        # TODO: consider new 'add_player' method instead
+        game_obj = Game(subreddit_id=subreddit.id, players=[tagger, tagee])
         instance = await self.insert(game_obj, from_orm=False)
-        logger.info(f"NEW INSTANCE======{instance}")
+        # logger.info(f"New r/{subreddit.display_name} Game[{instance}]")
+
+        # await self.add_player(tagger, instance.ref_id)
+        # await self.add_player(tagee, instance.ref_id)
+        logger.info(
+            f"New Game[{instance}] created with Players[{tagger.username}, {tagee.username}]"
+        )
+
         return instance
 
     async def active(self) -> List[Game]:

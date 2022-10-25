@@ -33,10 +33,13 @@ class AbstractRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType],
         commit: Optional[bool] = True,
         from_orm: Optional[bool] = True,
     ) -> ModelType:
+        # TODO: remove "from_orm" flag and remove below condition
         db_obj = obj_in
         if from_orm:
             db_obj = self.model.from_orm(obj_in)
-        logger.info(f"INSERT======db_obj: {db_obj}")
+
+        logger.info(f"Inserting new object[{db_obj}]")
+
         # You'll usually want to add to the self.db
         if add:
             self.db.add(db_obj)
@@ -69,6 +72,7 @@ class AbstractRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType],
         update_data = obj_in.dict(
             exclude_unset=True
         )  # This tells Pydantic to not include the values that were not sent
+
         logger.info(f"Updating====data: {update_data}")
         logger.info(f"Updating====obj_current-pre: {obj_current}")
         for field in update_data:

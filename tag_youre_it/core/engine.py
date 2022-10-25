@@ -5,7 +5,6 @@ from uuid import UUID
 
 import asyncpraw
 from aiohttp import ClientSession
-from sqlmodel import select
 
 from tag_youre_it.core.clients import DbClient
 from tag_youre_it.core.config import settings
@@ -55,13 +54,7 @@ class GameEngine:
 
             async with asyncpraw.Reddit(**self.reddit_config) as reddit:
                 logger.info(f"Streaming mentions for u/{settings.USERNAME}")
-                # TODO: get first active game of subreddit here
-                results = await db.game.db.execute(
-                    select(db.game.model).where(db.game.model.id == 1)
-                )
-                game = results.scalar_one()
 
-                logger.info(f"GAMEPLAYERS=====; {game.players}")
                 async for mention in self.stream_service.stream(reddit):
 
                     pre_flight_check: bool = await self.stream_service.pre_flight_check(db, mention)

@@ -40,3 +40,11 @@ def test_comment_reply_tag_enum():
         f"\nTag you're it!\n\nYou have been tagged by u/test. Let's see how long we can keep this game going...you have 5 minutes to tag another user! They can be tagged by mentioning my username in a comment with '!tag' trigger.\n\nIf you haven't tagged anybody within the allotted time, the game will reset and break the chain. If you would like to opt out of playing, send me a private message with 'i dont want to play tag' as the subject (this will reset the game).\n\n___\n{FOOTER}"  # noqa
         == test_str
     )
+
+
+def test_game_over_reply_tag_enum():
+    test_str = ReplyEnum.game_over(987)
+    assert (
+        f"\nSorry but you are 987s late to tag. The current game will end.\n\n___\n{FOOTER}"  # noqa
+        == test_str
+    )

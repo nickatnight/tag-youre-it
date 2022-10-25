@@ -25,6 +25,7 @@ class InboxStreamService(AbstractStream[Message]):
         author_name = author.name
         logger.info(f"Reading mention from [{author_name}]")
 
+        # messages which involve user engagement take precedence
         if obj.was_comment is False:
             # user previously opted out and wants to play again
             enable_check = TagEnum.ENABLE_PHRASE == obj.subject.title().lower()
@@ -45,12 +46,12 @@ class InboxStreamService(AbstractStream[Message]):
             await obj.mark_read()
             return False
 
+        # check if mention is not from the streams subreddit
         mention_subreddit = obj.subreddit
         await mention_subreddit.load()
 
-        # check if mention is not from the streams subreddit
         if mention_subreddit.display_name != self.subreddit_name:
-            logger.warning(
+            logger.info(
                 f"SubReddit[r/{self.subreddit_name}] does not match mention "
                 f"Subreddit: r/{mention_subreddit.display_name}...skipping"
             )
@@ -97,6 +98,8 @@ class InboxStreamService(AbstractStream[Message]):
 
             # a game is currently being played
             if game is not None:
+
+                # TODO: change this, active game means tagger is already created
                 tagger: Player = await db_client.player.get_or_create(mention_author)
                 tagee: Player = await db_client.player.get_or_create(author)
 
@@ -110,18 +113,25 @@ class InboxStreamService(AbstractStream[Message]):
                     if tag_over_time > TAG_TIME:
                         await db_client.reset_game(game.ref_id, tagger)
                         await obj.reply(ReplyEnum.game_over(tag_over_time=tag_over_time))
+                        return None
 
-                    return None
+                    # the 'it' person tagged another player
+                    await db_client.add_player_to_game(game_id, tagee)
 
-                logger.info(f"Current active game [{game.ref_id}, {game.players}].")
+                    return game_id
+
+                logger.info(f"Current active Game[{game_id}] Player(s)[{game.players}].")
+
                 await obj.reply(ReplyEnum.active_game())
-                return game.ref_id
+                return game_id
 
             # there is no active game, so start a new one
             tagger: Player = await db_client.player.untag(mention_author)
             tagee: Player = await db_client.player.tag(author)
             game: Game = await db_client.game.create(subreddit, tagger, tagee)
-            logger.info(f"PLAYERS=====: {game.players}")
+
+            logger.info(f"New Game[{game}] created")
+
             await parent.reply(ReplyEnum.comment_reply_tag(mention_author.name))
 
             return game.ref_id

@@ -10,9 +10,6 @@ from tag_youre_it.models.player import Player
 
 
 class GameBase(SQLModel):
-    # players: List[Player] = Relationship(
-    #     back_populates="games", link_model=GamePlayerLink
-    # )
     is_active: bool = Field(default=True, description="Is the Game active or not.")
     subreddit_id: int = Field(
         default=None, foreign_key="subreddit.id", description="The database uuid of the subreddit"

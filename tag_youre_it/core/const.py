@@ -48,14 +48,15 @@ Welcome back to the game u/{author}! :wave:
 """
 
 GAME_OVER = """
-Sorry but you are {tag_over_time}s late to tag. A new game will start.
+Sorry but you are {tag_over_time}s late to tag. The current game will end.
 """
 
 FOOTER = (
     "^^[&nbsp;how&nbsp;to&nbsp;use]"
     "(https://www.reddit.com/r/TagYoureItBot/comments/pgmpsa/beta_version_release/)"
-    "&nbsp;|&nbsp;[creator](https://www.reddit.com/message/compose/?to=betazoid_one)"
+    "&nbsp;|&nbsp;[creator](https://www.reddit.com/message/compose/?to=throwie_one)"
     "&nbsp;|&nbsp;[source&nbsp;code](https://github.com/nickatnight/tag-youre-it)"
+    "&nbsp;|&nbsp;[wikihow](https://www.wikihow.com/Play-Tag)"
 )
 
 
