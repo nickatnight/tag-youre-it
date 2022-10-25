@@ -105,9 +105,9 @@ class InboxStreamService(AbstractStream[Message]):
 
                 # is the tagger actually it?
                 if tagger.tag_time:
-                    tag_over_time: int = (
-                        datetime.now(timezone.utc) - tagger.tag_time
-                    ).total_seconds()
+                    tag_over_time: int = int(
+                        (datetime.now(timezone.utc) - tagger.tag_time).total_seconds()
+                    )
 
                     # player didn't tag anyone in allotted time, so end current game
                     if tag_over_time > TAG_TIME:
