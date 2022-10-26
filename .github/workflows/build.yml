@@ -50,6 +50,11 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
   
+      - uses: actions/upload-artifact@master
+        with:
+          name: virtual-env
+          path: ${{github.workspace}}/.venv
+  
       # - name: Checkout
       #   uses: actions/checkout@v3
       # - name: Set up python

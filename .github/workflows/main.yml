@@ -17,6 +17,12 @@ env:
 jobs:
   build:
     uses: ./.github/workflows/build.yml
+    steps:
+      - name: Download artifact
+      - uses: actions/download-artifact@master
+        with:
+          name: virtual-env
+          path: ${{github.workspace}}/.venv
 
   mypy:
     needs: build
@@ -26,7 +32,7 @@ jobs:
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: .venv
+          path: ${{github.workspace}}/.venv
           key: venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/poetry.lock') }}
           restore-keys: ${{ env.PYTHON_VERSION }}-
       - name: MyPy
