@@ -29,6 +29,7 @@ jobs:
         with:
           version: ${{ env.POETRY_VERSION }}
           virtualenvs-create: true
+          virtualenvs-path: .venv
           installer-parallel: true
 
       #----------------------------------------------
