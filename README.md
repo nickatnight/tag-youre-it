@@ -115,7 +115,9 @@ $ docker compose run --rm tag alembic upgrade head
 - refactor DbClient and AbstractRepository
 - ~setup mypy~ [#14](https://github.com/nickatnight/tag-youre-it/pull/14)
 - ~add subreddit check when stream processing~ [#12](https://github.com/nickatnight/tag-youre-it/pull/12)
-- ~finish process() logic~
+- ~finish process() logic~ [#16](https://github.com/nickatnight/tag-youre-it/pull/16)
 - decorator for yielding database sessions
 - add loader method for apraw objects
 - add flowchart
+- add smaller steps to GHA
+- add PgAdmin

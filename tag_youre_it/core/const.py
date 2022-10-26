@@ -48,7 +48,7 @@ Welcome back to the game u/{author}! :wave:
 """
 
 GAME_OVER = """
-Sorry but you are {tag_over_time}s late to tag. The current game will end.
+The current 'it' users time to tag has expired...{tag_over_time}s too late. The current game will end.
 """
 
 FOOTER = (

@@ -56,7 +56,7 @@ class GameEngine:
                 logger.info(f"Streaming mentions for u/{settings.USERNAME}")
 
                 async for mention in self.stream_service.stream(reddit):
-
+                    # pass
                     pre_flight_check: bool = await self.stream_service.pre_flight_check(db, mention)
                     if pre_flight_check:
                         game_id = await self.stream_service.process(db, mention, game_id)

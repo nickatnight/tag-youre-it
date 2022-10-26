@@ -1,5 +1,6 @@
 import logging
-from typing import List
+from typing import List, Union
+from uuid import UUID
 
 from sqlmodel import select
 
@@ -18,23 +19,29 @@ class GameRepository(AbstractRepository[Game, IGameCreate, IGameUpdate]):
 
     async def create(self, subreddit: SubReddit, tagger: Player, tagee: Player) -> Game:
         # TODO: consider new 'add_player' method instead
-        game_obj = Game(subreddit_id=subreddit.id, players=[tagger, tagee])
-        instance = await self.insert(game_obj, from_orm=False)
-        # logger.info(f"New r/{subreddit.display_name} Game[{instance}]")
+        game_obj = IGameCreate(subreddit_id=subreddit.id)
+        instance = await self.insert(game_obj)
+        logger.info(f"New r/{subreddit.display_name} Game[{instance}]")
 
-        # await self.add_player(tagger, instance.ref_id)
-        # await self.add_player(tagee, instance.ref_id)
-        logger.info(
-            f"New Game[{instance}] created with Players[{tagger.username}, {tagee.username}]"
-        )
+        await self.add_player(tagger, instance.ref_id)
+        await self.add_player(tagee, instance.ref_id)
 
         return instance
+
+    async def add_player(self, player: Player, game_ref_id: Union[UUID, str]) -> None:
+        game = await self.get(game_ref_id)
+        game.players.append(player)
+
+        await self.db.commit()
+        await self.db.refresh(game)
+
+        logger.info(f"Adding Players[{player.username}] to Game[{game.ref_id}]")
 
     async def active(self) -> List[Game]:
         statement = (
             select(self.model)
             .where(self.model.is_active == True)  # noqa
-            .order_by(self.model.__table__.columns["created_at"].desc())
+            .order_by(self.model.__table__.columns["created_at"].desc())  # type: ignore
         )
         results = await self.db.execute(statement)
         games: List[Game] = results.scalars().all()

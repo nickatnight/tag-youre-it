@@ -1,13 +1,11 @@
-from typing import Optional
 from uuid import UUID
 
-from sqlmodel import SQLModel
+from tag_youre_it.core.utils import optional
+from tag_youre_it.models.subreddit import SubRedditBase
 
 
-class ISubRedditBase(SQLModel):
-    name: Optional[str] = None
-    sub_id: Optional[str] = None
-    display_name: Optional[str] = None
+class ISubRedditBase(SubRedditBase):
+    pass
 
 
 class ISubRedditCreate(ISubRedditBase):
@@ -18,5 +16,6 @@ class ISubRedditRead(ISubRedditBase):
     ref_id: UUID
 
 
-class ISubRedditUpdate(SQLModel):
+@optional
+class ISubRedditUpdate(ISubRedditBase):
     pass

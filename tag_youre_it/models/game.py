@@ -10,10 +10,10 @@ from tag_youre_it.models.player import Player
 
 
 class GameBase(SQLModel):
-    is_active: bool = Field(default=True, description="Is the Game active or not.")
     subreddit_id: int = Field(
         default=None, foreign_key="subreddit.id", description="The database uuid of the subreddit"
     )
+    is_active: Optional[bool] = Field(default=True, description="Is the Game active or not.")
 
 
 class Game(BaseModel, GameBase, table=True):

@@ -54,18 +54,14 @@ class PlayerRepository(AbstractRepository[Player, IPlayerCreate, IPlayerUpdate])
 
         return instance
 
-    async def untag(self, reddit_obj: Redditor):
+    async def untag(self, reddit_obj: Redditor) -> None:
         instance = await self.get_or_create(reddit_obj)
 
         player_obj = IPlayerUpdate(tag_time=None)
-        return await self.update(instance, player_obj)
+        _ = await self.update(instance, player_obj)
 
-    async def tag(self, reddit_obj: Redditor):
+    async def tag(self, reddit_obj: Redditor) -> None:
         instance = await self.get_or_create(reddit_obj)
-        instance.tag_time = datetime.now(timezone.utc)
-        logger.info(f"instance===== post tag: {instance}")
-        self.db.add(instance)
-        await self.db.commit()
-        await self.db.refresh(instance)
 
-        return instance
+        player_obj = IPlayerUpdate(tag_time=datetime.now(timezone.utc))
+        _ = await self.update(instance, player_obj)

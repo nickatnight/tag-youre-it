@@ -31,12 +31,8 @@ class AbstractRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType],
         add: Optional[bool] = True,
         flush: Optional[bool] = True,
         commit: Optional[bool] = True,
-        from_orm: Optional[bool] = True,
     ) -> ModelType:
-        # TODO: remove "from_orm" flag and remove below condition
-        db_obj = obj_in
-        if from_orm:
-            db_obj = self.model.from_orm(obj_in)
+        db_obj = self.model.from_orm(obj_in)
 
         logger.info(f"Inserting new object[{db_obj}]")
 
@@ -58,17 +54,20 @@ class AbstractRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType],
 
         return db_obj
 
-    async def get(self, ref_id: Union[UUID, str]) -> Optional[ModelType]:
-        query = select(self.model).where(self.model.ref_id == ref_id)
+    async def get(self, ref_id: Union[UUID, str]) -> ModelType:
+        query = select(self.model).where(getattr(self.model, "ref_id") == ref_id)
         response = await self.db.execute(query)
+        scalar: Optional[ModelType] = response.scalar_one_or_none()
 
-        return response.scalar_one_or_none()
+        if not scalar:
+            raise Exception("no object")
+        return scalar
 
     async def update(
         self,
         obj_current: ModelType,
         obj_in: Union[UpdateSchemaType, ModelType],
-    ):
+    ) -> ModelType:
         update_data = obj_in.dict(
             exclude_unset=True
         )  # This tells Pydantic to not include the values that were not sent
@@ -82,5 +81,4 @@ class AbstractRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType],
         await self.db.commit()
         await self.db.refresh(obj_current)
 
-        logger.info(f"Updating====obj_current-post: {obj_current}")
         return obj_current

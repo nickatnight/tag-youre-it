@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 64a6ca17e434
+Revision ID: 094458957ddf
 Revises:
-Create Date: 2022-10-25 01:01:35.153137
+Create Date: 2022-10-26 05:23:06.693898
 
 """
 import sqlalchemy as sa
@@ -11,7 +11,7 @@ from alembic import op
 
 
 # revision identifiers, used by Alembic.
-revision = "64a6ca17e434"
+revision = "094458957ddf"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,10 +29,11 @@ def upgrade() -> None:
         sa.Column("username", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("icon_img", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("is_employee", sa.Boolean(), nullable=False),
-        sa.Column("opted_out", sa.Boolean(), nullable=False),
+        sa.Column("opted_out", sa.Boolean(), nullable=True),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("ref_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("username"),
     )
     op.create_index(op.f("ix_player_id"), "player", ["id"], unique=False)
     op.create_index(op.f("ix_player_ref_id"), "player", ["ref_id"], unique=False)
@@ -40,9 +41,15 @@ def upgrade() -> None:
         "subreddit",
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("name", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-        sa.Column("sub_id", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-        sa.Column("display_name", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.Column("name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("sub_id", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("display_name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("created_utc", sa.Integer(), nullable=False),
+        sa.Column("description", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("description_html", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("over18", sa.Boolean(), nullable=False),
+        sa.Column("subscribers", sa.Integer(), nullable=False),
+        sa.Column("is_banned", sa.Boolean(), nullable=True),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("ref_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -53,8 +60,8 @@ def upgrade() -> None:
         "game",
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("is_active", sa.Boolean(), nullable=False),
         sa.Column("subreddit_id", sa.Integer(), nullable=True),
+        sa.Column("is_active", sa.Boolean(), nullable=True),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("ref_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
         sa.ForeignKeyConstraint(
