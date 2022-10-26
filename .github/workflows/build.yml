@@ -29,7 +29,7 @@ jobs:
         with:
           version: ${{ env.POETRY_VERSION }}
           virtualenvs-create: true
-          virtualenvs-path: .venv
+          virtualenvs-path: ${{github.workspace}}/.venv
           installer-parallel: true
 
       #----------------------------------------------
@@ -39,8 +39,9 @@ jobs:
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          path: ${{github.workspace}}/.venv
+          key: venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: ${{ env.PYTHON_VERSION }}-
 
       #----------------------------------------------
       # install dependencies if cache does not exist
@@ -48,12 +49,6 @@ jobs:
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
-
-      #----------------------------------------------
-      # install your root project, if required
-      #----------------------------------------------
-      - name: Install project
-        run: poetry install --no-interaction
   
       # - name: Checkout
       #   uses: actions/checkout@v3
