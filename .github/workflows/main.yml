@@ -12,13 +12,14 @@ on:
       - develop
 
 jobs:
-  build:
-    uses: ./.github/workflows/build.yml
+  # build:
+  #   uses: ./.github/workflows/build.yml
 
   mypy:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: ./.github/workflows/build.yml
       - name: MyPy
         run: poetry run mypy tag_youre_it/
   
@@ -26,6 +27,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: ./.github/workflows/build.yml
       - name: Black
         run: poetry run black tag_youre_it --check
   
@@ -33,6 +35,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: ./.github/workflows/build.yml
       - name: Flake8
         run: oetry run flake8 tag_youre_it
   
