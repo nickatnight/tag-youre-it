@@ -65,7 +65,7 @@ jobs:
       #     flags: unittests
 
   create-release:
-    needs: lint-and-test
+    needs: flake
     runs-on: ubuntu-latest
     steps:
       - name: checkout

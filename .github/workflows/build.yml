@@ -2,7 +2,6 @@ name: build
 
 on: [workflow_call]  # allow this workflow to be called from other workflows
 
-
 env:
   PYTHON_VERSION: 3.9
   POETRY_VERSION: 1.1.15
