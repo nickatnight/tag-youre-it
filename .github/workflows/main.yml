@@ -1,4 +1,4 @@
-name: lint and test
+name: main
 
 on:
   push:
@@ -12,36 +12,57 @@ on:
       - develop
 
 jobs:
-  lint-and-test:
+  build:
+    uses: ./.github/workflows/build.yml
+
+  mypy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
-      - name: Set up python/poetry
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - name: Install Poetry
-        run: |
-          pip install -U pip
-          pip install poetry
-          poetry install
-        env:
-          POETRY_VIRTUALENVS_CREATE: true
       - name: MyPy
         run: poetry run mypy tag_youre_it/
+  
+  black:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Black
         run: poetry run black tag_youre_it --check
+  
+  flake:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Flake8
-        run: poetry run flake8 tag_youre_it
-      - name: Coverage
-        run: poetry run pytest --cov-report xml --cov=tag_youre_it tests/
-      - name: Codecov
-        if: success()
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage.xml
-          flags: unittests
+        run: oetry run flake8 tag_youre_it
+  
+      # - name: Checkout
+      #   uses: actions/checkout@master
+      # - name: Set up python/poetry
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.9
+      # - name: Install Poetry
+      #   run: |
+      #     pip install -U pip
+      #     pip install poetry
+      #     poetry install
+      #   env:
+      #     POETRY_VIRTUALENVS_CREATE: true
+      # - name: MyPy
+      #   run: poetry run mypy tag_youre_it/
+      # - name: Black
+      #   run: poetry run black tag_youre_it --check
+      # - name: Flake8
+      #   run: poetry run flake8 tag_youre_it
+      # - name: Coverage
+      #   run: poetry run pytest --cov-report xml --cov=tag_youre_it tests/
+      # - name: Codecov
+      #   if: success()
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     files: ./coverage.xml
+      #     flags: unittests
 
   create-release:
     needs: lint-and-test

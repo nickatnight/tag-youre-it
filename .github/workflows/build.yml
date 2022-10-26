@@ -1,0 +1,31 @@
+name: build
+
+on: [workflow_call]  # allow this workflow to be called from other workflows
+
+
+env:
+  PYTHON_VERSION: 3.9
+  POETRY_VERSION: 1.1.15
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'poetry'
+  
+      # - name: Checkout
+      #   uses: actions/checkout@v3
+      # - name: Set up python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: ${{ env.PYTHON_VERSION }}
+      # - name: Set up poetry
+      #   uses: abatilo/actions-poetry@v2
+      #   with:
+      #     poetry-version: ${{ env.POETRY_VERSION }}
