@@ -17,6 +17,10 @@ env:
 jobs:
   build:
     uses: ./.github/workflows/build.yml
+
+  mypy:
+    needs: build
+    runs-on: ubuntu-latest
     steps:
       - name: Download artifact
         uses: actions/download-artifact@master
@@ -24,10 +28,6 @@ jobs:
           name: virtual-env
           path: ${{github.workspace}}/.venv
 
-  mypy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Load cached venv
         id: cached-poetry-dependencies
         uses: actions/cache@v3
