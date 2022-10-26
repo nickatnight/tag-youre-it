@@ -19,7 +19,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     steps:
       - name: Download artifact
-      - uses: actions/download-artifact@master
+        uses: actions/download-artifact@master
         with:
           name: virtual-env
           path: ${{github.workspace}}/.venv
