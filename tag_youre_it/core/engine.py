@@ -1,6 +1,7 @@
 import copy
 import logging
 from typing import Optional, Union
+from uuid import UUID
 
 import asyncpraw
 from aiohttp import ClientSession
@@ -23,6 +24,8 @@ logger = logging.getLogger(__name__)
 #               __/ |
 #              |___/
 class GameEngine:
+    """main class for game...max one instance of GameEngine per Subreddit"""
+
     def __init__(
         self,
         db_client: DbClient,
@@ -46,14 +49,14 @@ class GameEngine:
                     },  # must successfully close the session when finished
                 }
             )
-            game_id: Optional[str] = ""
+            game_id: Optional[Union[UUID, str]] = None
             db: DbClient = self.db_client
 
             async with asyncpraw.Reddit(**self.reddit_config) as reddit:
                 logger.info(f"Streaming mentions for u/{settings.USERNAME}")
 
                 async for mention in self.stream_service.stream(reddit):
-
+                    # pass
                     pre_flight_check: bool = await self.stream_service.pre_flight_check(db, mention)
                     if pre_flight_check:
                         game_id = await self.stream_service.process(db, mention, game_id)

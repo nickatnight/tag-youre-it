@@ -1,10 +1,8 @@
+import inspect
 import logging
 
 from emoji import emojize
-
-
-# from tag_youre_it.core.clients import DbClient
-# from tag_youre_it.schemas.subreddit import ISubRedditCreate
+from pydantic import BaseModel
 
 
 logger = logging.getLogger(__name__)
@@ -14,21 +12,15 @@ def _emojize(s: str) -> str:
     return emojize(s, variant="emoji_type", language="alias")
 
 
-# async def check_valid_subreddit(db_client: DbClient, obj: Message, subreddit_name: str):
-#     mention_subreddit = obj.subreddit
-#     await mention_subreddit.load()
+# https://github.com/pydantic/pydantic/issues/1223
+def optional(*fields):  # type: ignore
+    def dec(_cls):  # type: ignore
+        for field in fields:
+            _cls.__fields__[field].required = False
+        return _cls
 
-#     subreddit_obj = ISubRedditCreate(
-#         name=mention_subreddit.name,
-#         sub_id=mention_subreddit.id,
-#         display_name=mention_subreddit.display_name,
-#     )
-#     _ = await db_client.subreddit.get_or_create(subreddit_obj)
-
-#     # check if mention is not from streams defined subreddit
-#     if mention_subreddit.display_name != subreddit_name:
-#         logger.warning(
-#             f"SubReddit[{subreddit_name}] does not match mention "
-#             f"SubReddit: {mention_subreddit.display_name}"
-#         )
-#         return False
+    if fields and inspect.isclass(fields[0]) and issubclass(fields[0], BaseModel):
+        cls = fields[0]
+        fields = cls.__fields__  # type: ignore
+        return dec(cls)  # type: ignore
+    return dec

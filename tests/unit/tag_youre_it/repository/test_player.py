@@ -13,7 +13,7 @@
 #     player_1 = (
 #         Player(
 #             reddit_id="nny218",
-#             reddit_username="harry",
+#             username="harry",
 #             icon_img="reddit.com",
 #             opted_out=False,
 #             is_it=True,

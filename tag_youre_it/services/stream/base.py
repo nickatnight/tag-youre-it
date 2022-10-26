@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any, AsyncIterator, Generic, Optional, TypeVar
+from typing import Any, AsyncIterator, Generic, Optional, TypeVar, Union
+from uuid import UUID
 
 import asyncpraw
 from asyncpraw.models.base import AsyncPRAWBase
@@ -11,7 +12,7 @@ PrawType = TypeVar("PrawType", bound=AsyncPRAWBase)
 
 
 class AbstractStream(Generic[PrawType], metaclass=ABCMeta):
-    """interface to stream different Reddit objects Comments, Messaging, etc"""
+    """interface to stream Reddit Comments, Messaging, etc from a particular Subreddit"""
 
     def __init__(self, subreddit_name: str) -> None:
         self.subreddit_name: str = subreddit_name
@@ -29,7 +30,9 @@ class AbstractStream(Generic[PrawType], metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    async def process(self, db_client: Any, obj: PrawType, game_id: Optional[str]) -> Optional[str]:
+    async def process(
+        self, db_client: Any, obj: PrawType, game_id: Optional[Union[UUID, str]] = None
+    ) -> Optional[Union[UUID, str]]:
         """process Reddit object since this was most likely a 'tag' message
 
         :param db_client:           database client for interacting with database
