@@ -119,5 +119,5 @@ $ docker compose run --rm tag alembic upgrade head
 - decorator for yielding database sessions
 - add loader method for apraw objects
 - add flowchart
-- add smaller steps to GHA
+- ~add smaller steps to GHA~ [#18](https://github.com/nickatnight/tag-youre-it/pull/18)
 - add PgAdmin
