@@ -1,0 +1,131 @@
+---
+
+name: lint and test
+
+on: [workflow_call]  # allow this workflow to be called from other workflows
+
+env:
+  PYTHON_VERSION: 3.9
+  POETRY_VERSION: 1.1.15
+
+jobs:
+  black:
+    name: black
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Install poetry 📚
+        run: pipx install poetry
+
+      - name: Set up Python 3.9 🐍
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "poetry"
+
+      - name: Install dependencies 🤖
+        run: poetry install
+
+      - name: Lint Black 🖤
+        run: poetry run black .
+
+  mypy:
+    name: mypy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Install poetry 📚
+        run: pipx install poetry
+
+      - name: Set up Python 3.9 🐍
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "poetry"
+
+      - name: Install dependencies 🤖
+        run: poetry install
+
+      - name: Lint MyPy 📝
+        run: poetry run mypy tag_youre_it/
+
+  isort:
+    name: isort
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Install poetry 📚
+        run: pipx install poetry
+
+      - name: Set up Python 3.9 🐍
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "poetry"
+
+      - name: Install dependencies 🤖
+        run: poetry install
+
+      - name: Lint with isort 📉
+        run: poetry run isort .
+
+  flake:
+    name: flake8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Install poetry 📚
+        run: pipx install poetry
+
+      - name: Set up Python 3.9 🐍
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "poetry"
+
+      - name: Install dependencies 🤖
+        run: poetry install
+
+      - name: Lint Flake8 🧹
+        run: poetry run flake8
+  
+  pytest:
+    name: pytest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Install poetry 📚
+        run: pipx install poetry
+
+      - name: Set up Python 3.9 🐍
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "poetry"
+
+      - name: Install dependencies 🤖
+        run: poetry install
+
+      - name: Pytest Coverage ⚡️
+        run: docker-compose -f docker-compose.test.yml up --exit-code-from tag
+
+      - name: Codecov
+        if: success()
+        uses: codecov/codecov-action@v3
+        with:
+          files: /data/coverage.xml
+          flags: unittests
+
+      - name: Clean-up
+        if: always()
+        run: docker-compose -f docker-compose.test.yml down -v

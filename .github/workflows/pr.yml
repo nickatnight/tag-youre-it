@@ -1,0 +1,12 @@
+---
+
+name: pull request
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint-and-test:
+    uses: ./.github/workflows/lint-and-test.yml
