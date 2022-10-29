@@ -45,6 +45,12 @@ extend-exclude = '(\.git|\.hg|\.mypy_cache|\.tox|\.venv|_build|migrations)'
 [tool.codespell]
 ignore-words-list = 'selectin,'
 
+[tool.coverage.report]
+fail_under = 70
+
+[tool.coverage.run]
+omit = ['*play.py', '*tests/*']
+
 [tool.mypy]
 # --strict
 disallow_any_generics = true

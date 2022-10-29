@@ -1,9 +1,15 @@
-from unittest.mock import patch
+import asyncio
+from typing import Generator
 
 import pytest
 import pytest_asyncio
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel
-from sqlmodel.main import default_registry
+
+from tag_youre_it.core.db import test_engine
+from tag_youre_it.models import Player, SubReddit
+from tests.unit import test_redditor_one, test_subreddit
 
 
 FAKE_SETTINGS = dict(
@@ -13,24 +19,49 @@ FAKE_SETTINGS = dict(
 )
 
 
-@pytest.fixture()
-def clear_sqlmodel():
-    # Clear the tables in the metadata for the default base model
-    SQLModel.metadata.clear()
-    # Clear the Models associated with the registry, to avoid warnings
-    default_registry.dispose()
-    yield
-    SQLModel.metadata.clear()
-    default_registry.dispose()
+@pytest.fixture(scope="session")
+def event_loop(request) -> Generator:  # noqa: indirect usage
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
 
 
-@pytest_asyncio.fixture
-async def db_conn():
-    with patch("tag_youre_it.core.clients.async_session") as mock_pool:
-        mock_pool.configure_mock(
-            **{
-                "async_session.return_value": mock_pool,
-            }
-        )
+@pytest_asyncio.fixture(scope="function")
+async def async_session() -> AsyncSession:
+    async_test_session = sessionmaker(test_engine, class_=AsyncSession, expire_on_commit=False)
 
-        yield mock_pool
+    async with async_test_session() as s:
+        async with test_engine.begin() as conn:
+            await conn.run_sync(SQLModel.metadata.create_all)
+
+        yield s
+
+    async with test_engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.drop_all)
+
+    await test_engine.dispose()
+
+
+@pytest.fixture
+def player() -> Player:
+    return Player(
+        username=test_redditor_one["name"],
+        reddit_id=test_redditor_one["id"],
+        icon_img=test_redditor_one["icon_img"],
+        is_employee=test_redditor_one["is_employee"],
+        created_utc=test_redditor_one["created_utc"],
+    )
+
+
+@pytest.fixture
+def subreddit() -> SubReddit:
+    return SubReddit(
+        name=test_subreddit["name"],
+        sub_id=test_subreddit["id"],
+        display_name=test_subreddit["display_name"],
+        created_utc=test_subreddit["created_utc"],
+        description=test_subreddit["description"],
+        description_html=test_subreddit["description_html"],
+        over18=test_subreddit["over18"],
+        subscribers=test_subreddit["subscribers"],
+    )

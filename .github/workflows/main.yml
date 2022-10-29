@@ -36,7 +36,7 @@ jobs:
         run: poetry install
 
       - name: Lint Black
-        run: poetry run black tag_youre_it
+        run: poetry run black .
 
   mypy:
     name: mypy
@@ -58,7 +58,7 @@ jobs:
         run: poetry install
 
       - name: Lint MyPy
-        run: 	poetry run mypy tag_youre_it/
+        run: poetry run mypy tag_youre_it/
 
   isort:
     name: isort
@@ -80,7 +80,7 @@ jobs:
         run: poetry install
 
       - name: Lint with isort
-        run: 	poetry run isort tag_youre_it/
+        run: poetry run isort .
 
   flake:
     name: flake8
@@ -102,7 +102,7 @@ jobs:
         run: poetry install
 
       - name: Lint Flake8
-        run: 	poetry run flake8 tag_youre_it
+        run: poetry run flake8
   
   pytest:
     name: pytest
@@ -124,13 +124,13 @@ jobs:
         run: poetry install
 
       - name: Coverage
-        run: 	poetry run pytest --cov-report xml --cov=tag_youre_it tests/
+        run: docker-compose -f docker-compose.test.yml up --exit-code-from tag
 
       - name: Codecov
         if: success()
         uses: codecov/codecov-action@v3
         with:
-          files: ./coverage.xml
+          files: /data/coverage.xml
           flags: unittests
 
   create-release:

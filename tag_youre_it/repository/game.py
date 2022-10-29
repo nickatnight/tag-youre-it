@@ -18,7 +18,6 @@ class GameRepository(AbstractRepository[Game, IGameCreate, IGameUpdate]):
     model = Game
 
     async def create(self, subreddit: SubReddit, tagger: Player, tagee: Player) -> Game:
-        # TODO: consider new 'add_player' method instead
         game_obj = IGameCreate(subreddit_id=subreddit.id)
         instance = await self.insert(game_obj)
         logger.info(f"New r/{subreddit.display_name} Game[{instance}]")

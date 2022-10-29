@@ -15,6 +15,14 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
 
+  db-test:
+    image: postgres:14.1-alpine
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - '5431:5432'
+
   tag:
     restart: always
     env_file:
@@ -29,7 +37,7 @@ services:
     command: |
         bash -c "
         while !</dev/tcp/db/5432; do sleep 1; done;
-        python3 play.py"
+        python3 tag_youre_it/play.py"
     depends_on:
       - db
     environment:
