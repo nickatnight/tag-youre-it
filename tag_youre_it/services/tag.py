@@ -2,9 +2,10 @@ import logging
 from typing import List, Optional, Union
 from uuid import UUID
 
-from tag_youre_it.models.game import Game
-from tag_youre_it.models.player import Player
-from tag_youre_it.models.subreddit import SubReddit
+from asyncpraw.models import Redditor
+from asyncpraw.models import Subreddit as PrawSubReddit
+
+from tag_youre_it.models import Game, Player, SubReddit
 from tag_youre_it.repository import (
     GameRepository,
     PlayerRepository,
@@ -17,8 +18,9 @@ from tag_youre_it.schemas.player import IPlayerUpdate
 logger: logging.Logger = logging.getLogger(__name__)
 
 
-# TODO: move abstract repository methods here and remove dependency
 class TagService:
+    """main service for all tag operations"""
+
     def __init__(
         self, player: PlayerRepository, game: GameRepository, subreddit: SubRedditRepository
     ):
@@ -56,3 +58,28 @@ class TagService:
             return
 
         await self.game.add_player(tagee, game_ref_id)
+
+    async def game_create(self, subreddit: SubReddit, tagger: Player, tagee: Player) -> Game:
+        g: Game = await self.game.create(subreddit, tagger, tagee)
+        return g
+
+    async def player_get_or_create(self, reddit_obj: Redditor) -> Player:
+        p: Player = await self.player.get_or_create(reddit_obj)
+        return p
+
+    async def player_tag(self, reddit_obj: Redditor) -> None:
+        await self.player.tag(reddit_obj)
+
+    async def player_untag(self, reddit_obj: Redditor) -> None:
+        await self.player.untag(reddit_obj)
+
+    async def player_list_opted_out(self) -> List[str]:
+        opt_list: List[str] = await self.player.list_opted_out()
+        return opt_list
+
+    async def player_set_opted_out(self, reddit_id: str, value: bool) -> None:
+        await self.player.set_opted_out(reddit_id, value)
+
+    async def subreddit_get_or_create(self, reddit_obj: PrawSubReddit) -> SubReddit:
+        sub: SubReddit = await self.subreddit.get_or_create(reddit_obj)
+        return sub

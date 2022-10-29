@@ -31,7 +31,7 @@ Invoke `u/TagYoureItBot` by replying to a Reddit post or comment with the phrase
 ## Rules
 You can't tag...
 1. yourself
-2. back....yet
+2. ~back....yet~
 3. a user who has opted out of playing
 4. u/TagYoureItBot
 
@@ -49,6 +49,14 @@ c) Showcase the ecosystem of my open source projects and how they work together:
 d) I'm curious to see stats of user engagement (how long did a game chain last, how many users did it contain, which subreddit plays the most, etc)
 
 See [r/TagYoureItBot](https://www.reddit.com/r/TagYoureItBot) for more updates.
+
+## Tech
+This module is intended to act like a django app. Any async Python web framework (like FastAPI) using alembic can leverage this package:
+* **Docker Compose** integration and optimization for local development.
+* **SQLModel** Library for interacting with SQL databases from Python code, with Python objects. It is designed to be intuitive, easy to use, highly compatible, and robust
+* **PostgresSQL** Powerfull open source object-relational database
+* **Alembic** Lightweight database migration tool for usage with the SQLAlchemy Database Toolkit for Python
+* **AsyncPG** Database interface library designed specifically for PostgreSQL and Python/asyncio.
 
 ## Running Locally
 1. Clone repo `git clone https://github.com/nickatnight/tag-youre-it`
@@ -73,7 +81,17 @@ Flake8
 $ poetry run flake8
 ```
 
-Test
+MyPy
+```shell
+$ poetry run mypy tag_youre_it
+```
+
+iSort
+```shell
+$ poetry run isort .
+```
+
+Test (project needs to be up and running)
 ```shell
 $ docker compose exec tag pytest --cov=tag_youre_it tests/
 ```
@@ -112,7 +130,7 @@ $ docker compose run --rm tag alembic upgrade head
 - add exception handling
 - ~add docker compose for local testing/dev~ [#6](https://github.com/nickatnight/tag-youre-it/pull/6)
 - ~increase coverage to sensible percentage~ [#20](https://github.com/nickatnight/tag-youre-it/pull/20)
-- ~refactor TagService and AbstractRepository~
+- ~refactor DbClient and AbstractRepository~
 - ~setup mypy~ [#14](https://github.com/nickatnight/tag-youre-it/pull/14)
 - ~add subreddit check when stream processing~ [#12](https://github.com/nickatnight/tag-youre-it/pull/12)
 - ~finish process() logic~ [#16](https://github.com/nickatnight/tag-youre-it/pull/16)

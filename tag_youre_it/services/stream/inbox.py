@@ -25,24 +25,24 @@ class InboxStreamService(AbstractStream[Message]):
         author_name = author.name
         logger.info(f"Reading mention from [{author_name}]")
 
-        # messages which involve user engagement take precedence
+        # direct messages which involve user engagement take precedence
         if obj.was_comment is False:
             logger.info(f"Subject of Message[{obj.subject}")
 
             # user previously opted out and wants to play again
             enable_check = TagEnum.ENABLE_PHRASE == obj.subject.title().lower()
-            opted_out_check1 = author_name in await tag_service.player.list_opted_out()
+            opted_out_check1 = author_name in await tag_service.player_list_opted_out()
 
             if all([enable_check, opted_out_check1]):
-                await tag_service.player.set_opted_out(author.id, False)
+                await tag_service.player_set_opted_out(author.id, False)
                 await obj.reply(ReplyEnum.welcome_back(author=author_name))
 
             # user wants to opt of playing
             disable_check = TagEnum.DISABLE_PHRASE == obj.subject.title().lower()
-            opted_out_check2 = author_name not in await tag_service.player.list_opted_out()
+            opted_out_check2 = author_name not in await tag_service.player_list_opted_out()
 
             if all([disable_check, opted_out_check2]):
-                await tag_service.player.set_opted_out(author.id, True)
+                await tag_service.player_set_opted_out(author.id, True)
                 await obj.reply(ReplyEnum.user_opts_out_info(author=author_name))
 
             await obj.mark_read()
@@ -69,7 +69,7 @@ class InboxStreamService(AbstractStream[Message]):
             mention_subreddit: PrawSubReddit = obj.subreddit
             await mention_subreddit.load()
 
-            subreddit: SubReddit = await tag_service.subreddit.get_or_create(mention_subreddit)
+            subreddit: SubReddit = await tag_service.subreddit_get_or_create(mention_subreddit)
             game: Optional[Game] = await tag_service.current_game(subreddit)
 
             mention_author: Redditor = obj.author  # the person tagging
@@ -93,14 +93,14 @@ class InboxStreamService(AbstractStream[Message]):
                 return game_id
 
             # prevent an opted out user from participating in game
-            if author.name in await tag_service.player.list_opted_out():
+            if author.name in await tag_service.player_list_opted_out():
                 logger.info(f"Player [{author.username}] has opted out.")
                 await obj.reply(ReplyEnum.user_opts_out(author=author.username))
                 return game_id
 
             # TODO: change this, active game means tagger is already created
-            tagger: Player = await tag_service.player.get_or_create(mention_author)
-            tagee: Player = await tag_service.player.get_or_create(author)
+            tagger: Player = await tag_service.player_get_or_create(mention_author)
+            tagee: Player = await tag_service.player_get_or_create(author)
 
             # a game is currently being played
             if game is not None:  # add check for game.modified_at
@@ -129,8 +129,8 @@ class InboxStreamService(AbstractStream[Message]):
                 return game_id
 
             # there is no active game, so start a new one
-            await tag_service.player.untag(mention_author)
-            await tag_service.player.tag(author)
+            await tag_service.player_untag(mention_author)
+            await tag_service.player_tag(author)
             game = await tag_service.game.create(subreddit, tagger, tagee)
 
             logger.info(f"New Game[{game}] created")
