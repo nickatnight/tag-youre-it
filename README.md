@@ -75,7 +75,7 @@ $ poetry run flake8
 
 Test
 ```shell
-$ poetry run pytest --cov=tag_youre_it tests/
+$ docker compose exec tag pytest --cov=tag_youre_it tests/
 ```
 
 Package dist and create new setup.py
@@ -111,8 +111,8 @@ $ docker compose run --rm tag alembic upgrade head
 - "tag back" flag
 - add exception handling
 - ~add docker compose for local testing/dev~ [#6](https://github.com/nickatnight/tag-youre-it/pull/6)
-- increase coverage to sensible percentage
-- refactor DbClient and AbstractRepository
+- ~increase coverage to sensible percentage~ [#20](https://github.com/nickatnight/tag-youre-it/pull/20)
+- ~refactor TagService and AbstractRepository~
 - ~setup mypy~ [#14](https://github.com/nickatnight/tag-youre-it/pull/14)
 - ~add subreddit check when stream processing~ [#12](https://github.com/nickatnight/tag-youre-it/pull/12)
 - ~finish process() logic~ [#16](https://github.com/nickatnight/tag-youre-it/pull/16)

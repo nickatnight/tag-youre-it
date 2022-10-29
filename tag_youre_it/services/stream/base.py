@@ -18,12 +18,12 @@ class AbstractStream(Generic[PrawType], metaclass=ABCMeta):
         self.subreddit_name: str = subreddit_name
 
     @abstractmethod
-    async def pre_flight_check(self, db_client: Any, obj: PrawType) -> bool:
+    async def pre_flight_check(self, tag_service: Any, obj: PrawType) -> bool:
         """check/process messages that were not comments
 
         these are private messages or things like mod mail
 
-        :param db_client:           database client for interacting with database
+        :param tag_service:         database client for interacting with database
         :param obj:                 AsyncPRAW Reddit object
         :return:                    True if further processing needed, False otherwise
         """
@@ -31,11 +31,11 @@ class AbstractStream(Generic[PrawType], metaclass=ABCMeta):
 
     @abstractmethod
     async def process(
-        self, db_client: Any, obj: PrawType, game_id: Optional[Union[UUID, str]] = None
+        self, tag_service: Any, obj: PrawType, game_id: Optional[Union[UUID, str]] = None
     ) -> Optional[Union[UUID, str]]:
         """process Reddit object since this was most likely a 'tag' message
 
-        :param db_client:           database client for interacting with database
+        :param tag_service:         database client for interacting with database
         :param obj:                 AsyncPRAW Reddit object
         :param game_id:             Id of the Game database object
         :return:                    New game id TODO: come back to this logic
