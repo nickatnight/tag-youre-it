@@ -3,28 +3,40 @@ version: '3'
 services:
   db-test:
     image: postgres:14.1-alpine
-    env_file:
-      - .env
-    ports:
-      - '5431:5432'
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=db-test
 
   tag:
-    env_file:
-      - .env
     build:
       context: ./
       dockerfile: ./Dockerfile
       args:
-        env: "TEST"
-    ports:
-      - "8666:8000"
+        env: "test"
     command: |
         bash -c "
-        while !</dev/tcp/db/5432; do sleep 1; done;
+        while !</dev/tcp/db-test/5432; do sleep 1; done;
         pytest --cov-report=xml:/data/coverage.xml --cov=tag_youre_it/ tests/"
     depends_on:
-      - db
+      - db-test
     environment:
       - PYTHONUNBUFFERED=0
+      - USERNAME=test
+      - PASSWORD=test
+      - CLIENT_ID=test
+      - CLIENT_SECRET=test
+      - BOT_NAME=tag-youre-it-bot
+      - VERSION=v2
+      - DEVELOPER=nickatnight
+      - ENV=test
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST_TEST=db-test
+
     volumes:
       - /data:/data  # to access coverage.xml
