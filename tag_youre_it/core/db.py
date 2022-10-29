@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 
-def get_db_url(test=False) -> str:
+def get_db_url(test: bool = False) -> str:
     POSTGRES_USER = os.getenv("POSTGRES_USER")
     POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
     POSTGRES_HOST = os.getenv("POSTGRES_HOST_TEST") if test else os.getenv("POSTGRES_HOST")

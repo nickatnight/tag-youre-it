@@ -65,12 +65,12 @@ Requires [Poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-inst
 ### Helpful commands
 Black
 ```shell
-$ poetry run black tag_youre_it/
+$ poetry run black .
 ```
 
 Flake8
 ```shell
-$ poetry run flake8 tag_youre_it/
+$ poetry run flake8
 ```
 
 Test

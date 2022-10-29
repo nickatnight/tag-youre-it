@@ -8,8 +8,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel
 
 from tag_youre_it.core.db import test_engine
-from tag_youre_it.models import Player
-from tests.unit import test_redditor_one
+from tag_youre_it.models import Player, SubReddit
+from tests.unit import test_redditor_one, test_subreddit
 
 
 FAKE_SETTINGS = dict(
@@ -43,11 +43,25 @@ async def async_session() -> AsyncSession:
 
 
 @pytest.fixture
-def player():
+def player() -> Player:
     return Player(
         username=test_redditor_one["name"],
         reddit_id=test_redditor_one["id"],
         icon_img=test_redditor_one["icon_img"],
         is_employee=test_redditor_one["is_employee"],
         created_utc=test_redditor_one["created_utc"],
+    )
+
+
+@pytest.fixture
+def subreddit() -> SubReddit:
+    return SubReddit(
+        name=test_subreddit["name"],
+        sub_id=test_subreddit["id"],
+        display_name=test_subreddit["display_name"],
+        created_utc=test_subreddit["created_utc"],
+        description=test_subreddit["description"],
+        description_html=test_subreddit["description_html"],
+        over18=test_subreddit["over18"],
+        subscribers=test_subreddit["subscribers"],
     )
