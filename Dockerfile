@@ -18,8 +18,8 @@ COPY . /code/
 
 ENV PYTHONPATH "${PYTHONPATH}:/code"
 
-WORKDIR /code/tag_youre_it
+WORKDIR /code
 
 EXPOSE 8666
 
-CMD ["python3", "./play.py"]
+CMD ["python3", "tag_youre_it/play.py"]
