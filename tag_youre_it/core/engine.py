@@ -6,10 +6,10 @@ from uuid import UUID
 import asyncpraw
 from aiohttp import ClientSession
 
-from tag_youre_it.core.clients import DbClient
 from tag_youre_it.core.config import settings
 from tag_youre_it.core.typed import RedditClientConfigTyped
 from tag_youre_it.services import CommentStreamService, InboxStreamService
+from tag_youre_it.services.tag import TagService
 
 
 logger = logging.getLogger(__name__)
@@ -28,11 +28,11 @@ class GameEngine:
 
     def __init__(
         self,
-        db_client: DbClient,
+        tag_service: TagService,
         stream_service: Union[InboxStreamService, CommentStreamService],
         reddit_config: RedditClientConfigTyped,
     ):
-        self.db_client = db_client
+        self.tag_service = tag_service
         self.stream_service = stream_service
         self.reddit_config = reddit_config
 
@@ -50,15 +50,17 @@ class GameEngine:
                 }
             )
             game_id: Optional[Union[UUID, str]] = None
-            db: DbClient = self.db_client
+            tag_service: TagService = self.tag_service
 
             async with asyncpraw.Reddit(**self.reddit_config) as reddit:
                 logger.info(f"Streaming mentions for u/{settings.USERNAME}")
 
                 async for mention in self.stream_service.stream(reddit):
                     # pass
-                    pre_flight_check: bool = await self.stream_service.pre_flight_check(db, mention)
+                    pre_flight_check: bool = await self.stream_service.pre_flight_check(
+                        tag_service, mention
+                    )
                     if pre_flight_check:
-                        game_id = await self.stream_service.process(db, mention, game_id)
+                        game_id = await self.stream_service.process(tag_service, mention, game_id)
 
                         await mention.mark_read()

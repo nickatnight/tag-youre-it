@@ -9,9 +9,9 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 if __name__ == "__main__":
     from tag_youre_it.core import (
-        DbClient,
         GameEngine,
         RedditClientConfigTyped,
+        TagService,
         settings,
     )
     from tag_youre_it.core.const import SupportedSubs
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     }
 
     e = GameEngine(
-        db_client=DbClient(player, game, subreddit),
+        tag_service=TagService(player, game, subreddit),
         stream_service=InboxStreamService(SupportedSubs.TAG_YOURE_IT_BOT),
         reddit_config=config,
     )

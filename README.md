@@ -18,7 +18,7 @@
 </p>
 
 # tag-youre-it :runner:
-Play virtual tag with other users on Reddit
+Play virtual tag with other users on [Reddit](https://www.reddit.com/)
 
 ## How To Play
 For now, this bot will only supports subreddit-level play (one active game per sub). This prevents trolls from locking a global game to a (private)subreddit (See the TODO for future enhancements):
@@ -31,7 +31,7 @@ Invoke `u/TagYoureItBot` by replying to a Reddit post or comment with the phrase
 ## Rules
 You can't tag...
 1. yourself
-2. back....yet
+2. ~back....yet~
 3. a user who has opted out of playing
 4. u/TagYoureItBot
 
@@ -40,7 +40,7 @@ To opt out of playing, send `u/TagYoureItBot` a private message which contains '
 If you would like to opt back in, send `u/TagYoureItBot` a private message with 'i want to play tag again' as the subject
 
 ## Why did I build this?
-a) A few years ago I read a [reddit blog post](https://www.redditinc.com/blog/how-we-built-rplace/), where they outlined how r/Place was built. I got inspired by the community aspect of the project, and wanted to create something similar (obviously no where near the scale/volume). I pushed a closed source v1 last year, but the game logic was coupled to the web api code (FastApi). I decided to decompose the bot logic into an open source package and keep the web api closed source.
+a) A few years ago I read a [reddit blog post](https://www.redditinc.com/blog/how-we-built-rplace/), where they outlined how r/Place was built. I got inspired by the community aspect of the project, and wanted to create something similar (obviously no where near the scale/volume). So I started to create a digital version of Tag that can be played on Reddit. I pushed a closed source v1 last year, but the game logic was coupled to the web api code (FastApi). I decided to decompose the bot logic into an open source package and keep the web api closed source.
 
 b) Want keep my Python skills fresh since I've been doing a lot of full-stack development in my current role (React/Java).
 
@@ -49,6 +49,14 @@ c) Showcase the ecosystem of my open source projects and how they work together:
 d) I'm curious to see stats of user engagement (how long did a game chain last, how many users did it contain, which subreddit plays the most, etc)
 
 See [r/TagYoureItBot](https://www.reddit.com/r/TagYoureItBot) for more updates.
+
+## Tech
+This module is intended to act like a django app. Any async Python web framework (like FastAPI) using alembic can leverage this package:
+* **Docker Compose** integration and optimization for local development.
+* **SQLModel** Library for interacting with SQL databases from Python code, with Python objects. It is designed to be intuitive, easy to use, highly compatible, and robust
+* **PostgresSQL** Powerfull open source object-relational database
+* **Alembic** Lightweight database migration tool for usage with the SQLAlchemy Database Toolkit for Python
+* **AsyncPG** Database interface library designed specifically for PostgreSQL and Python/asyncio.
 
 ## Running Locally
 1. Clone repo `git clone https://github.com/nickatnight/tag-youre-it`
@@ -73,9 +81,19 @@ Flake8
 $ poetry run flake8
 ```
 
-Test
+MyPy
 ```shell
-$ poetry run pytest --cov=tag_youre_it tests/
+$ poetry run mypy tag_youre_it
+```
+
+iSort
+```shell
+$ poetry run isort .
+```
+
+Test (project needs to be up and running)
+```shell
+$ docker compose exec tag pytest --cov=tag_youre_it tests/
 ```
 
 Package dist and create new setup.py
@@ -111,8 +129,8 @@ $ docker compose run --rm tag alembic upgrade head
 - "tag back" flag
 - add exception handling
 - ~add docker compose for local testing/dev~ [#6](https://github.com/nickatnight/tag-youre-it/pull/6)
-- increase coverage to sensible percentage
-- refactor DbClient and AbstractRepository
+- ~increase coverage to sensible percentage~ [#20](https://github.com/nickatnight/tag-youre-it/pull/20)
+- ~refactor DbClient and AbstractRepository~ [#22](https://github.com/nickatnight/tag-youre-it/pull/22)
 - ~setup mypy~ [#14](https://github.com/nickatnight/tag-youre-it/pull/14)
 - ~add subreddit check when stream processing~ [#12](https://github.com/nickatnight/tag-youre-it/pull/12)
 - ~finish process() logic~ [#16](https://github.com/nickatnight/tag-youre-it/pull/16)

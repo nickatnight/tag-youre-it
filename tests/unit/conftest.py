@@ -42,6 +42,7 @@ async def async_session() -> AsyncSession:
     await test_engine.dispose()
 
 
+# TODO: add base fields here?
 @pytest.fixture
 def player() -> Player:
     return Player(
