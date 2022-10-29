@@ -15,6 +15,14 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
 
+  db-test:
+    image: postgres:14.1-alpine
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - '5431:5432'
+
   tag:
     restart: always
     env_file:
