@@ -69,3 +69,28 @@ async def test_untag(async_session: AsyncSession, player: Player):
     await repo.untag(mock_redditor)
 
     assert player.tag_time is None
+
+
+@pytest.mark.asyncio
+async def test_list_opted_out(async_session: AsyncSession, player: Player):
+    player.opted_out = True
+
+    async_session.add(player)
+    await async_session.commit()
+    await async_session.refresh(player)
+
+    repo = PlayerRepository(async_session)
+    assert player.username in await repo.list_opted_out()
+
+
+@pytest.mark.asyncio
+async def test_set_opted_out_true(async_session: AsyncSession, player: Player):
+    repo = PlayerRepository(async_session)
+    assert player.opted_out is False
+
+    async_session.add(player)
+    await async_session.commit()
+    await async_session.refresh(player)
+    await repo.set_opted_out(player.reddit_id, True)
+
+    assert player.opted_out is True

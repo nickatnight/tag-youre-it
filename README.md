@@ -18,7 +18,7 @@
 </p>
 
 # tag-youre-it :runner:
-Play virtual tag with other users on Reddit
+Play virtual tag with other users on [Reddit](https://www.reddit.com/)
 
 ## How To Play
 For now, this bot will only supports subreddit-level play (one active game per sub). This prevents trolls from locking a global game to a (private)subreddit (See the TODO for future enhancements):
@@ -40,7 +40,7 @@ To opt out of playing, send `u/TagYoureItBot` a private message which contains '
 If you would like to opt back in, send `u/TagYoureItBot` a private message with 'i want to play tag again' as the subject
 
 ## Why did I build this?
-a) A few years ago I read a [reddit blog post](https://www.redditinc.com/blog/how-we-built-rplace/), where they outlined how r/Place was built. I got inspired by the community aspect of the project, and wanted to create something similar (obviously no where near the scale/volume). I pushed a closed source v1 last year, but the game logic was coupled to the web api code (FastApi). I decided to decompose the bot logic into an open source package and keep the web api closed source.
+a) A few years ago I read a [reddit blog post](https://www.redditinc.com/blog/how-we-built-rplace/), where they outlined how r/Place was built. I got inspired by the community aspect of the project, and wanted to create something similar (obviously no where near the scale/volume). So I started to create a digital version of Tag that can be played on Reddit. I pushed a closed source v1 last year, but the game logic was coupled to the web api code (FastApi). I decided to decompose the bot logic into an open source package and keep the web api closed source.
 
 b) Want keep my Python skills fresh since I've been doing a lot of full-stack development in my current role (React/Java).
 
@@ -130,7 +130,7 @@ $ docker compose run --rm tag alembic upgrade head
 - add exception handling
 - ~add docker compose for local testing/dev~ [#6](https://github.com/nickatnight/tag-youre-it/pull/6)
 - ~increase coverage to sensible percentage~ [#20](https://github.com/nickatnight/tag-youre-it/pull/20)
-- ~refactor DbClient and AbstractRepository~
+- ~refactor DbClient and AbstractRepository~ [#22](https://github.com/nickatnight/tag-youre-it/pull/22)
 - ~setup mypy~ [#14](https://github.com/nickatnight/tag-youre-it/pull/14)
 - ~add subreddit check when stream processing~ [#12](https://github.com/nickatnight/tag-youre-it/pull/12)
 - ~finish process() logic~ [#16](https://github.com/nickatnight/tag-youre-it/pull/16)

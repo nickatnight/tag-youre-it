@@ -1,5 +1,7 @@
 FROM python:3.9 as base
 
+LABEL maintainer="nickkelly.858@gmail.com"
+
 WORKDIR /tmp
 
 RUN pip install poetry

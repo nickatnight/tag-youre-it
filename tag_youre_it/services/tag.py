@@ -19,7 +19,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class TagService:
-    """main service for all tag operations"""
+    """main service for all Tag operations"""
 
     def __init__(
         self, player: PlayerRepository, game: GameRepository, subreddit: SubRedditRepository
