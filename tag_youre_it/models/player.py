@@ -24,6 +24,7 @@ class PlayerBase(SQLModel):
     )
     # game fields
     opted_out: Optional[bool] = Field(default=False)
+    is_banned: Optional[bool] = Field(default=False)
     tag_time: Optional[datetime] = Field(
         sa_column=Column(
             DateTime(timezone=True),

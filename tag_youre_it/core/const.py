@@ -53,7 +53,7 @@ The current 'it' users time to tag has expired...{tag_over_time}s too late. The 
 
 FOOTER = (
     "^^[&nbsp;how&nbsp;to&nbsp;use]"
-    "(https://www.reddit.com/r/TagYoureItBot/comments/pgmpsa/beta_version_release/)"
+    "(https://www.reddit.com/r/TagYoureItBot/comments/yi25li/tagyoureitbot_info_v22/)"
     "&nbsp;|&nbsp;[creator](https://www.reddit.com/message/compose/?to=throwie_one)"
     "&nbsp;|&nbsp;[source&nbsp;code](https://github.com/nickatnight/tag-youre-it)"
     "&nbsp;|&nbsp;[wikihow](https://www.wikihow.com/Play-Tag)"

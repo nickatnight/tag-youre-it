@@ -52,7 +52,7 @@ typing_extensions = ">=3.7.2"
 name = "alembic"
 version = "1.8.1"
 description = "A database migration tool for SQLAlchemy."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -333,7 +333,7 @@ requirements_deprecated_finder = ["pip-api", "pipreqs"]
 name = "mako"
 version = "1.2.3"
 description = "A super-fast templating language that borrows the best ideas from the existing templating languages."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -349,7 +349,7 @@ testing = ["pytest"]
 name = "markupsafe"
 version = "2.1.1"
 description = "Safely add untrusted strings to HTML/XML markup."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -714,7 +714,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "d9b67a1a366a5417cf21a7dad4fc0df03991f7928313bced0d3c2212a53d1f20"
+content-hash = "24aa4bc92205dc14c38995aad3c21ae82241c42403eab5cb3847c3d458b53a04"
 
 [metadata.files]
 aiofiles = [

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tag-youre-it"
-version = "2.1.5"
+version = "2.1.6"
 description = "Play tag with other Redditors"
 readme = "README.md"
 authors = ["nickatnight <nickkelly.858@gmail.com>"]
@@ -13,6 +13,7 @@ asyncpraw = "^7.5.0"
 pydantic = "^1.10.2"
 emoji = "^2.1.0"
 sqlmodel = "^0.0.8"
+alembic = "^1.8.1"
 
 [tool.poetry.dev-dependencies]
 black = "22.6.0"
@@ -22,13 +23,15 @@ pytest = "6.2.3"
 pytest-cov = "2.12.0"
 mock = "^4.0.3"
 asyncpg = "^0.26.0"
-alembic = "^1.8.1"
 pytest-asyncio = "^0.19.0"
 pytest-mock = "^3.10.0"
 mypy = "^0.982"
 types-emoji = "^2.1.0"
 codespell = "^2.2.2"
 tomli = "^2.0.1"
+
+[tool.poetry.scripts]
+apply-migrations = "tag_youre_it.scripts.apply_migrations:main"
 
 [tool.isort]
 multi_line_output = 3
