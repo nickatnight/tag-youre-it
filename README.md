@@ -104,17 +104,17 @@ $ tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py
 
 Initialize first migration (project must be up with docker compose up and contain no 'version' files)
 ```shell
-$ docker compose run --rm tag alembic revision --autogenerate -m "init"
+$ docker compose run --rm tag alembic -c tag_youre_it/alembic.ini revision --autogenerate -m "init"
 ```
 
 Create new migration file
 ```shell
-$ docker compose run --rm tag alembic revision --autogenerate -m "add a new field or something cool"
+$ docker compose run --rm tag alembic -c tag_youre_it/alembic.ini revision --autogenerate -m "add a new field or something cool"
 ```
 
 Apply migrations
 ```shell
-$ docker compose run --rm tag alembic upgrade head
+$ docker compose run --rm tag alembic -c tag_youre_it/alembic.ini upgrade head
 ```
 
 ## TODO
