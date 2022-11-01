@@ -5,12 +5,12 @@ from uuid import UUID
 from asyncpraw.models import Redditor
 from asyncpraw.models import Subreddit as PrawSubReddit
 
-from tag_youre_it.models import Game, Player, SubReddit
-from tag_youre_it.repository import (
-    GameRepository,
-    PlayerRepository,
-    SubRedditRepository,
-)
+from tag_youre_it.models.game import Game
+from tag_youre_it.models.player import Player
+from tag_youre_it.models.subreddit import SubReddit
+from tag_youre_it.repository.game import GameRepository
+from tag_youre_it.repository.player import PlayerRepository
+from tag_youre_it.repository.subreddit import SubRedditRepository
 from tag_youre_it.schemas.game import IGameUpdate
 from tag_youre_it.schemas.player import IPlayerUpdate
 

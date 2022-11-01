@@ -3,8 +3,6 @@ import os
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from tag_youre_it.core.exceptions import ImproperlyConfigured
-
 
 def get_db_url(test: bool = False) -> str:
     POSTGRES_USER = os.getenv("POSTGRES_USER")
@@ -12,11 +10,6 @@ def get_db_url(test: bool = False) -> str:
     POSTGRES_HOST = os.getenv("POSTGRES_HOST_TEST") if test else os.getenv("POSTGRES_HOST")
     POSTGRES_PORT = os.getenv("POSTGRES_PORT")
     POSTGRES_DB = os.getenv("POSTGRES_DB")
-
-    if not all([POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB]):
-        raise ImproperlyConfigured(
-            "Could not build Postgres URL string. Check environment variables."
-        )
 
     return f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"  # noqa
 

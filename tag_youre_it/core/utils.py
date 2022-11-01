@@ -2,7 +2,7 @@ import inspect
 import logging
 
 from emoji import emojize
-from pydantic import BaseModel
+from pydantic import BaseModel as DanticBaseModel
 
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ def optional(*fields):  # type: ignore
             _cls.__fields__[field].required = False
         return _cls
 
-    if fields and inspect.isclass(fields[0]) and issubclass(fields[0], BaseModel):
+    if fields and inspect.isclass(fields[0]) and issubclass(fields[0], DanticBaseModel):
         cls = fields[0]
         fields = cls.__fields__  # type: ignore
         return dec(cls)  # type: ignore

@@ -7,7 +7,7 @@ from sqlmodel import select
 from tag_youre_it.models.game import Game
 from tag_youre_it.models.player import Player
 from tag_youre_it.models.subreddit import SubReddit
-from tag_youre_it.repository import AbstractRepository
+from tag_youre_it.repository.base import AbstractRepository
 from tag_youre_it.schemas.game import IGameCreate, IGameUpdate
 
 

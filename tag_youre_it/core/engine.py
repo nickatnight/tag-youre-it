@@ -8,7 +8,8 @@ from aiohttp import ClientSession
 
 from tag_youre_it.core.config import settings
 from tag_youre_it.core.typed import RedditClientConfigTyped
-from tag_youre_it.services import CommentStreamService, InboxStreamService
+from tag_youre_it.services.stream.comment import CommentStreamService
+from tag_youre_it.services.stream.inbox import InboxStreamService
 from tag_youre_it.services.tag import TagService
 
 

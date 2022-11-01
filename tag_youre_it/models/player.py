@@ -10,7 +10,7 @@ from tag_youre_it.models.link import GamePlayerLink
 
 
 class PlayerBase(SQLModel):
-    # PRAW fields
+    # aPRAW fields
     reddit_id: str = Field(..., description="The ID of the Redditor.")
     username: str = Field(sa_column_kwargs={"unique": True}, description="The Redditor’s username.")
     icon_img: str = Field(..., description="The url of the Redditors’ avatar.")
@@ -36,7 +36,7 @@ class PlayerBase(SQLModel):
 class Player(BaseModel, PlayerBase, table=True):
     games: List["Game"] = Relationship(back_populates="players", link_model=GamePlayerLink, sa_relationship_kwargs={"lazy": "selectin"})  # type: ignore # noqa
 
-    @validator("ref_id", pre=True, always=True)
+    @validator("ref_id", pre=True, always=True)  # TODO: double check always
     def set_ref_id(cls, v: Optional[UUID] = None) -> UUID:
         return v or uuid4()
 

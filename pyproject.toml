@@ -49,7 +49,7 @@ extend-exclude = '(\.git|\.hg|\.mypy_cache|\.tox|\.venv|_build|migrations)'
 ignore-words-list = 'selectin,'
 
 [tool.coverage.report]
-fail_under = 70
+fail_under = 55
 
 [tool.coverage.run]
 omit = ['*play.py', '*tests/*']

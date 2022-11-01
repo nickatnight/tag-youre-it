@@ -9,8 +9,10 @@ from asyncpraw.models import Subreddit as PrawSubReddit
 
 from tag_youre_it.core.config import settings
 from tag_youre_it.core.const import TAG_TIME, ReplyEnum, TagEnum
-from tag_youre_it.models import Game, Player, SubReddit
-from tag_youre_it.services import AbstractStream
+from tag_youre_it.models.game import Game
+from tag_youre_it.models.player import Player
+from tag_youre_it.models.subreddit import SubReddit
+from tag_youre_it.services.stream.base import AbstractStream
 from tag_youre_it.services.tag import TagService
 
 

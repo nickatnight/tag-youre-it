@@ -4,7 +4,7 @@ from typing import Optional
 from pydantic import BaseConfig, validator
 from sqlmodel import Field, SQLModel
 
-from tag_youre_it.models import BaseModel
+from tag_youre_it.models.base import BaseModel
 
 
 class SubRedditBase(SQLModel):

@@ -6,7 +6,7 @@ from asyncpraw.models import Redditor
 from sqlmodel import select
 
 from tag_youre_it.models.player import Player
-from tag_youre_it.repository import AbstractRepository
+from tag_youre_it.repository.base import AbstractRepository
 from tag_youre_it.schemas.player import IPlayerCreate, IPlayerUpdate
 
 
