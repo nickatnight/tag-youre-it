@@ -9,8 +9,8 @@ tag_youre_it_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 alembic_args = ["-c", os.path.join(tag_youre_it_dir, "alembic.ini"), "upgrade", "head"]
 
 
-def main():
-    alembic.config.main(argv=alembic_args)
+def main() -> None:
+    alembic.config.main(argv=alembic_args)  # type: ignore
 
 
 if __name__ == "__main__":

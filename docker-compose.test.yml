@@ -37,6 +37,7 @@ services:
       - POSTGRES_DB=test
       - POSTGRES_PORT=5432
       - POSTGRES_HOST_TEST=db-test
+      - POSTGRES_HOST=db-test
 
     volumes:
       - /data:/data  # to access coverage.xml
