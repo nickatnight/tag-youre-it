@@ -61,5 +61,6 @@ class Player(BaseModel, PlayerBase, table=True):
                 "tag_time": "2004-09-16T23:59:58.75",
                 "is_employee": False,
                 "created_utc": "2004-09-16T23:59:58.75",
+                "ref_id": "a71fd2a5-a92f-4149-b91f-0ea4832ecc02",
             }
         }

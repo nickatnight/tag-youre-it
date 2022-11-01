@@ -4,18 +4,14 @@ from tag_youre_it.core.utils import optional
 from tag_youre_it.models.subreddit import SubRedditBase
 
 
-class ISubRedditBase(SubRedditBase):
+class ISubRedditCreate(SubRedditBase):
     pass
 
 
-class ISubRedditCreate(ISubRedditBase):
-    pass
-
-
-class ISubRedditRead(ISubRedditBase):
+class ISubRedditRead(SubRedditBase):
     ref_id: UUID
 
 
 @optional
-class ISubRedditUpdate(ISubRedditBase):
+class ISubRedditUpdate(SubRedditBase):
     pass

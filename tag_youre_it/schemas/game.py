@@ -6,19 +6,15 @@ from tag_youre_it.models.game import GameBase
 from tag_youre_it.models.player import Player
 
 
-class IGameBase(GameBase):
+class IGameCreate(GameBase):
     pass
 
 
-class IGameCreate(IGameBase):
-    pass
-
-
-class IGameRead(IGameBase):
+class IGameRead(GameBase):
     ref_id: UUID
     players: Optional[List[Player]] = []
 
 
 @optional
-class IGameUpdate(IGameBase):
+class IGameUpdate(GameBase):
     pass

@@ -6,19 +6,15 @@ from tag_youre_it.models.game import Game
 from tag_youre_it.models.player import PlayerBase
 
 
-class IPlayerBase(PlayerBase):
+class IPlayerCreate(PlayerBase):
     pass
 
 
-class IPlayerCreate(IPlayerBase):
-    pass
-
-
-class IPlayerRead(IPlayerBase):
+class IPlayerRead(PlayerBase):
     ref_id: UUID
     games: Optional[List[Game]] = []
 
 
 @optional
-class IPlayerUpdate(IPlayerBase):
+class IPlayerUpdate(PlayerBase):
     pass
