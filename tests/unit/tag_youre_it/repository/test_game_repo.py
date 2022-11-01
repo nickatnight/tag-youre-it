@@ -2,12 +2,11 @@ import pytest
 from mock import Mock
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from tag_youre_it.models import Game, Player
-from tag_youre_it.repository import (
-    GameRepository,
-    PlayerRepository,
-    SubRedditRepository,
-)
+from tag_youre_it.models.game import Game
+from tag_youre_it.models.player import Player
+from tag_youre_it.repository.game import GameRepository
+from tag_youre_it.repository.player import PlayerRepository
+from tag_youre_it.repository.subreddit import SubRedditRepository
 from tests.unit import test_subreddit
 
 

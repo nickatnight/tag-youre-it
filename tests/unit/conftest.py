@@ -8,7 +8,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel
 
 from tag_youre_it.core.db import test_engine
-from tag_youre_it.models import Player, SubReddit
+from tag_youre_it.models.player import Player
+from tag_youre_it.models.subreddit import SubReddit
 from tests.unit import test_redditor_one, test_subreddit
 
 

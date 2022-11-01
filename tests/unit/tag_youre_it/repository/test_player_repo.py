@@ -4,8 +4,8 @@ import pytest
 from mock import Mock
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from tag_youre_it.models import Player
-from tag_youre_it.repository import PlayerRepository
+from tag_youre_it.models.player import Player
+from tag_youre_it.repository.player import PlayerRepository
 from tests.unit import test_redditor_one
 
 
