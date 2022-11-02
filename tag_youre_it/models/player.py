@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import List, Optional
 from uuid import UUID, uuid4
 
-from pydantic import BaseConfig, validator
+from pydantic import validator
 from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
 
 from tag_youre_it.models.base import BaseModel
@@ -47,20 +47,3 @@ class Player(BaseModel, PlayerBase, table=True):
     @validator("updated_at", pre=True, always=True)
     def set_updated_at_now(cls, _: Optional[datetime] = None) -> datetime:
         return datetime.now(timezone.utc)
-
-    class Config(BaseConfig):
-        json_encoder = {
-            datetime: lambda dt: dt.replace(tzinfo=timezone.utc).isoformat(),
-        }
-        schema_extra = {
-            "example": {
-                "reddit_id": "dlb7rtu",
-                "username": "nny218",
-                "icon_img": "reddit.com",
-                "opted_out": False,
-                "tag_time": "2004-09-16T23:59:58.75",
-                "is_employee": False,
-                "created_utc": "2004-09-16T23:59:58.75",
-                "ref_id": "a71fd2a5-a92f-4149-b91f-0ea4832ecc02",
-            }
-        }

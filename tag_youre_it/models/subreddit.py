@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import Optional
 
-from pydantic import BaseConfig, validator
+from pydantic import validator
 from sqlmodel import Field, SQLModel
 
 from tag_youre_it.models.base import BaseModel
@@ -24,18 +24,6 @@ class SubRedditBase(SQLModel):
     is_banned: Optional[bool] = Field(
         default=False, description="Is the bot banned from the Subreddit."
     )
-
-    class Config(BaseConfig):
-        json_encoder = {
-            datetime: lambda dt: dt.replace(tzinfo=timezone.utc).isoformat(),
-        }
-        schema_extra = {
-            "example": {
-                "name": "t4_csdf9",
-                "sub_id": "nej7au",
-                "display_name": "TagYoureItBot",
-            }
-        }
 
 
 class SubReddit(BaseModel, SubRedditBase, table=True):

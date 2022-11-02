@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import List, Optional
 
-from pydantic import BaseConfig, validator
+from pydantic import validator
 from sqlmodel import Field, Relationship, SQLModel
 
 from tag_youre_it.models.base import BaseModel
@@ -30,20 +30,3 @@ class Game(BaseModel, GameBase, table=True):
     @validator("updated_at", pre=True, always=True)
     def set_updated_at_now(cls, _: Optional[datetime] = None) -> datetime:
         return datetime.now(timezone.utc)
-
-    class Config(BaseConfig):
-        json_encoder = {
-            datetime: lambda dt: dt.replace(tzinfo=timezone.utc).isoformat(),
-        }
-        schema_extra = {
-            "example": {
-                "players": [{"reddit_id": "nny27"}],
-                "is_active": True,
-                "subreddit_id": "2c4993a6-fac8-4467-a579-ffaeb41fb105",
-                "subreddit": {
-                    "name": "t4_csdf9",
-                    "sub_id": "nej7au",
-                    "display_name": "TagYoureItBot",
-                },
-            }
-        }
