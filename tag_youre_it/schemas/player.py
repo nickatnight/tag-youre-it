@@ -3,7 +3,7 @@ from uuid import UUID
 
 from tag_youre_it.core.utils import optional
 from tag_youre_it.models.game import Game
-from tag_youre_it.models.player import PlayerBase
+from tag_youre_it.models.player import Player, PlayerBase  # noqa
 
 
 class IPlayerCreate(PlayerBase):
