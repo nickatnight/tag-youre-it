@@ -78,8 +78,8 @@ async def run_migrations_online() -> None:
     #     )
     # )
     connectable = AsyncEngine(
-        create_engine(settings.POSTGRES_URL, echo=True, future=True)
-    )  # noqa type: ignore
+        create_engine(settings.POSTGRES_URL, echo=True, future=True)  # type: ignore
+    )
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
