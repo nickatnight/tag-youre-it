@@ -12,11 +12,9 @@ from sqlmodel import SQLModel
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
-from tag_youre_it.core.db import get_db_url  # noqa
+from tag_youre_it.core.config import settings  # noqa
 from tag_youre_it.models import *  # noqa
 
-
-POSTGRES_URL = get_db_url()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -49,7 +47,7 @@ def run_migrations_offline() -> None:
     script output.
     """
     context.configure(
-        url=POSTGRES_URL,
+        url=settings.POSTGRES_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -79,7 +77,7 @@ async def run_migrations_online() -> None:
     #         future=True,
     #     )
     # )
-    connectable = AsyncEngine(create_engine(POSTGRES_URL, echo=True, future=True))
+    connectable = AsyncEngine(create_engine(settings.POSTGRES_URL, echo=True, future=True))
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)

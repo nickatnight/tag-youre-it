@@ -1,7 +1,5 @@
-from datetime import datetime, timezone
 from typing import List, Optional
 
-from pydantic import validator
 from sqlmodel import Field, Relationship, SQLModel
 
 from tag_youre_it.models.base import BaseModel
@@ -22,11 +20,3 @@ class Game(BaseModel, GameBase, table=True):
         link_model=GamePlayerLink,
         sa_relationship_kwargs={"lazy": "selectin"},
     )
-
-    @validator("created_at", pre=True, always=True)
-    def set_created_at_now(cls, v: Optional[datetime] = None) -> datetime:
-        return v or datetime.now(timezone.utc)
-
-    @validator("updated_at", pre=True, always=True)
-    def set_updated_at_now(cls, _: Optional[datetime] = None) -> datetime:
-        return datetime.now(timezone.utc)

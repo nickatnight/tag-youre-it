@@ -4,6 +4,9 @@ test_redditor_one = {
     "id": "dah96037",
     "icon_img": "https://www.redditstatic.com/avatars/defaults/v2/avatar_default_3.png",
     "created_utc": 1626226832.0,
+    "verified": False,
+    "is_suspended": False,
+    "has_verified_email": False,
 }
 
 

@@ -11,7 +11,14 @@ from tests.unit import test_subreddit
 
 
 PLAYER_TWO = dict(
-    name="test", is_employee=False, id="fs89dfd", icon_img="test.com", created_utc=1626226832.0
+    name="test",
+    is_employee=False,
+    id="fs89dfd",
+    icon_img="test.com",
+    created_utc=1626226832.0,
+    verified=False,
+    is_suspended=False,
+    has_verified_email=False,
 )
 
 

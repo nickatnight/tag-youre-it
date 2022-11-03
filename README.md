@@ -71,6 +71,8 @@ Requires [Poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-inst
 1. install packages with `poetry install`
 
 ### Helpful commands
+All below commands can be ran with make eg. `make flake8`
+
 Black
 ```shell
 $ poetry run black .
