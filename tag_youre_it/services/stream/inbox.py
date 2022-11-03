@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime, timezone
+from time import gmtime, strftime
 from typing import AsyncIterator, Optional, Union
 from uuid import UUID
 
@@ -17,6 +18,7 @@ from tag_youre_it.services.tag import TagService
 
 
 logger = logging.getLogger(__name__)
+tag_time_human_readable: str = strftime("%M:%S", gmtime(TAG_TIME))
 
 
 class InboxStreamService(AbstractStream[Message]):
@@ -120,11 +122,15 @@ class InboxStreamService(AbstractStream[Message]):
                         return None
 
                     # the 'it' person tagged another player
-                    await tag_service.add_player_to_game(game.ref_id, tagee)
-                    await parent.reply(ReplyEnum.comment_reply_tag(tagger.username))
+                    await tag_service.add_player_to_game(game.ref_id, tagger, tagee)
+                    await parent.reply(
+                        ReplyEnum.comment_reply_tag(tagger.username, tag_time_human_readable)
+                    )
 
                     return game_id
 
+                # TODO: if tagger is not it, get the current it tagger and
+                # see if their time has expired
                 logger.info(f"Current active Game[{game_id}] Player(s)[{game.players}].")
 
                 await obj.reply(ReplyEnum.active_game())
@@ -136,7 +142,9 @@ class InboxStreamService(AbstractStream[Message]):
             game = await tag_service.game.create(subreddit, tagger, tagee)
 
             logger.info(f"New Game[{game}] created")
-            await parent.reply(ReplyEnum.comment_reply_tag(mention_author.name))
+            await parent.reply(
+                ReplyEnum.comment_reply_tag(mention_author.name, tag_time_human_readable)
+            )
 
             return game.ref_id
 

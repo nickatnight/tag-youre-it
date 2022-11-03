@@ -1,10 +1,10 @@
 # flake8: noqa
-
+from urllib.parse import quote_plus
 
 from tag_youre_it.core.utils import _emojize
 
 
-TAG_TIME = 480  # seconds
+TAG_TIME = 780  # seconds
 
 
 class TagEnum:
@@ -14,11 +14,11 @@ class TagEnum:
 
 
 COMMENT_REPLY_YOURE_IT = """
-Tag you're it!
+:robot: Tag you're it!
 
-You have been tagged by u/{author}. Let's see how long we can keep this game going...you have 5 minutes to tag another user! They can be tagged by mentioning my username in a comment with '!tag' trigger.
+You have been tagged by u/{author}. Let's see how long we can keep this game going...you have {timer} minutes to tag another user! They can be tagged by mentioning my username in a comment with '!tag' trigger.
 
-If you haven't tagged anybody within the allotted time, the game will reset and break the chain. If you would like to opt out of playing, send me a private message with 'i dont want to play tag' as the subject (this will reset the game).
+If you haven't tagged anybody within the allotted time, the game will end/reset and break the chain.
 """
 
 UNABLE_TO_TAG_SELF = """
@@ -54,9 +54,11 @@ The current 'it' users time to tag has expired...{tag_over_time}s too late. The 
 FOOTER = (
     "^^[&nbsp;how&nbsp;to&nbsp;use]"
     "(https://www.reddit.com/r/TagYoureItBot/comments/yi25li/tagyoureitbot_info_v22/)"
+    f"&nbsp;|&nbsp;[opt&nbsp;out](https://www.reddit.com/message/compose/?to=TagYoureItBot&subject={quote_plus(TagEnum.DISABLE_PHRASE)})"
     "&nbsp;|&nbsp;[creator](https://www.reddit.com/message/compose/?to=throwie_one)"
     "&nbsp;|&nbsp;[source&nbsp;code](https://github.com/nickatnight/tag-youre-it)"
     "&nbsp;|&nbsp;[wikihow](https://www.wikihow.com/Play-Tag)"
+    "&nbsp;|&nbsp;[public&nbsp;api](https://api-staging.tagyoureitbot.com/v2/openapi.json)"
 )
 
 
@@ -66,8 +68,8 @@ class ReplyEnum:
         return _emojize(f"{reply_string}\n___\n{FOOTER}")
 
     @staticmethod
-    def comment_reply_tag(author: str) -> str:
-        return ReplyEnum._e(COMMENT_REPLY_YOURE_IT.format(author=author))
+    def comment_reply_tag(author: str, timer: str) -> str:
+        return ReplyEnum._e(COMMENT_REPLY_YOURE_IT.format(author=author, timer=timer))
 
     @staticmethod
     def welcome_back(author: str) -> str:
@@ -102,3 +104,4 @@ class SupportedSubs:
     """names of subreddits (case sensitive)"""
 
     TAG_YOURE_IT_BOT = "TagYoureItBot"
+    DOGECOIN = "dogecoin"

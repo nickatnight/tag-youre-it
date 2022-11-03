@@ -7,10 +7,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel
 
-from tag_youre_it.core.db import test_engine
 from tag_youre_it.models.player import Player
 from tag_youre_it.models.subreddit import SubReddit
 from tests.unit import test_redditor_one, test_subreddit
+from tests.utils import test_engine
 
 
 FAKE_SETTINGS = dict(
@@ -52,6 +52,9 @@ def player() -> Player:
         icon_img=test_redditor_one["icon_img"],
         is_employee=test_redditor_one["is_employee"],
         created_utc=test_redditor_one["created_utc"],
+        verified=False,
+        is_suspended=False,
+        has_verified_email=True,
     )
 
 

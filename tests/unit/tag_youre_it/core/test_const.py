@@ -35,9 +35,9 @@ def test_user_opts_out_info_enum():
 
 
 def test_comment_reply_tag_enum():
-    test_str = ReplyEnum.comment_reply_tag("test")
+    test_str = ReplyEnum.comment_reply_tag("test", "13:00")
     assert (
-        f"\nTag you're it!\n\nYou have been tagged by u/test. Let's see how long we can keep this game going...you have 5 minutes to tag another user! They can be tagged by mentioning my username in a comment with '!tag' trigger.\n\nIf you haven't tagged anybody within the allotted time, the game will reset and break the chain. If you would like to opt out of playing, send me a private message with 'i dont want to play tag' as the subject (this will reset the game).\n\n___\n{FOOTER}"  # noqa
+        f"\n🤖 Tag you're it!\n\nYou have been tagged by u/test. Let's see how long we can keep this game going...you have 13:00 minutes to tag another user! They can be tagged by mentioning my username in a comment with '!tag' trigger.\n\nIf you haven't tagged anybody within the allotted time, the game will end/reset and break the chain.\n\n___\n{FOOTER}"  # noqa
         == test_str
     )
 
