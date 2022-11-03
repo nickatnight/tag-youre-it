@@ -18,7 +18,6 @@ class PlayerBase(SQLModel):
     icon_img: str = Field(..., description="The url of the Redditors’ avatar.")
     is_employee: bool = Field(..., description="Whether or not the Redditor is a Reddit employee.")
     verified: bool = Field(..., description="Whether the Redditor is verified.")
-    is_suspended: bool = Field(..., description="Whether the Redditor has been suspended.")
     has_verified_email: bool = Field(
         ..., description="Whether the Redditor has a verified email address."
     )
@@ -28,6 +27,9 @@ class PlayerBase(SQLModel):
             nullable=False,
         ),
         description="Time the account was created, represented in Unix Time.",
+    )
+    is_suspended: Optional[bool] = Field(
+        default=False, description="Whether the Redditor has been suspended."
     )
     # game fields
     opted_out: Optional[bool] = Field(default=False, description="Did the user opt out of playing.")

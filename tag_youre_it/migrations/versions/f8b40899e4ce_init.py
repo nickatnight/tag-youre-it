@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 35f5e3566fe8
+Revision ID: f8b40899e4ce
 Revises:
-Create Date: 2022-11-03 04:15:35.671685
+Create Date: 2022-11-03 06:29:56.774445
 
 """
 import sqlalchemy as sa
@@ -11,7 +11,7 @@ from alembic import op
 
 
 # revision identifiers, used by Alembic.
-revision = "35f5e3566fe8"
+revision = "f8b40899e4ce"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -35,8 +35,8 @@ def upgrade() -> None:
         sa.Column("icon_img", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("is_employee", sa.Boolean(), nullable=False),
         sa.Column("verified", sa.Boolean(), nullable=False),
-        sa.Column("is_suspended", sa.Boolean(), nullable=False),
         sa.Column("has_verified_email", sa.Boolean(), nullable=False),
+        sa.Column("is_suspended", sa.Boolean(), nullable=True),
         sa.Column("opted_out", sa.Boolean(), nullable=True),
         sa.Column("is_banned", sa.Boolean(), nullable=True),
         sa.Column("id", sa.Integer(), nullable=False),

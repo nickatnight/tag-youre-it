@@ -17,6 +17,15 @@ down:
 test:
 	docker compose exec tag pytest --cov=tag_youre_it
 
+bash:
+	docker compose exec tag bash
+
+db-shell:
+	docker compose exec db psql -U tagyoureit -d tagyoureit
+
+volume-rm:
+	docker volume rm tag-youre-it_db-data --force
+
 # poetry
 black:
 	poetry run black .

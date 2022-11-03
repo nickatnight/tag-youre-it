@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timezone
 from typing import List, Optional, Union
 from uuid import UUID
 
@@ -50,8 +51,15 @@ class TagService:
 
         return None
 
-    async def add_player_to_game(self, game_ref_id: Union[UUID, str], tagee: Player) -> None:
+    async def add_player_to_game(
+        self, game_ref_id: Union[UUID, str], tagger: Player, tagee: Player
+    ) -> None:
         game_ref_ids: List[str] = [str(g.ref_id) for g in tagee.games]
+        tagger_obj = IPlayerUpdate(tag_time=None)
+        tagge_obj = IPlayerUpdate(tag_time=datetime.now(timezone.utc))
+
+        await self.player.update(tagger, tagger_obj)
+        await self.player.update(tagee, tagge_obj)
 
         if str(game_ref_id) in game_ref_ids:
             logger.info(f"Player[{tagee.username}] already exists in Game[{game_ref_id}]")

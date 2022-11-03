@@ -20,7 +20,7 @@
 # tag-youre-it :runner:
 Play virtual tag with other users on [Reddit](https://www.reddit.com/)
 
-## How To Play
+## How To Play (BETA)
 For now, this bot will only supports subreddit-level play (one active game per sub). This prevents trolls from locking a global game to a (private)subreddit (See the TODO for future enhancements):
 
 Invoke `u/TagYoureItBot` by replying to a Reddit post or comment with the phrase `!tag` e.g. `u/TagYoureItBot !tag`. 1 of 2 things can happen:

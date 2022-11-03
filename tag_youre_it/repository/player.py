@@ -50,7 +50,7 @@ class PlayerRepository(AbstractRepository[Player, IPlayerCreate, IPlayerUpdate])
             is_employee=reddit_obj.is_employee,
             created_utc=reddit_obj.created_utc,
             verified=reddit_obj.verified,
-            is_suspended=reddit_obj.is_suspended,
+            is_suspended=reddit_obj.is_suspended if hasattr(reddit_obj, "is_suspended") else False,
             has_verified_email=reddit_obj.has_verified_email,
         )
         instance = await self.insert(player_obj)

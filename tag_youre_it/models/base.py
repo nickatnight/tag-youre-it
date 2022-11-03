@@ -39,9 +39,10 @@ class BaseModel(SQLModel):
         )
     )
     updated_at: Optional[datetime] = Field(
+        default_factory=datetime.utcnow,
         sa_column=Column(
             DateTime(timezone=True),
             onupdate=utcnow(),
             nullable=True,
-        )
+        ),
     )
