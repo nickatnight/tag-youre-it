@@ -9,12 +9,12 @@ from sqlmodel import Column, DateTime, Field, SQLModel
 
 
 # https://docs.sqlalchemy.org/en/20/core/compiler.html#utc-timestamp-function
-class utcnow(expression.FunctionElement):
+class utcnow(expression.FunctionElement):  # type: ignore
     type = DateTime()
     inherit_cache = True
 
 
-@compiles(utcnow, "postgresql")
+@compiles(utcnow, "postgresql")  # type: ignore
 def pg_utcnow(element, compiler, **kw) -> str:
     return "TIMEZONE('utc', CURRENT_TIMESTAMP)"
 

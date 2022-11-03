@@ -29,7 +29,7 @@ class Settings(BaseSettings):
         if isinstance(v, int):
             return v
 
-        return max(values.get("DB_POOL_SIZE") // values.get("WEB_CONCURRENCY"), 5)
+        return max(values.get("DB_POOL_SIZE") // values.get("WEB_CONCURRENCY"), 5)  # type: ignore
 
     @validator("POSTGRES_URL", pre=True)
     def build_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
