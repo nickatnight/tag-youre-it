@@ -58,7 +58,8 @@ FOOTER = (
     "&nbsp;|&nbsp;[creator](https://www.reddit.com/message/compose/?to=throwie_one)"
     "&nbsp;|&nbsp;[source&nbsp;code](https://github.com/nickatnight/tag-youre-it)"
     "&nbsp;|&nbsp;[wikihow](https://www.wikihow.com/Play-Tag)"
-    "&nbsp;|&nbsp;[public&nbsp;api](https://api-staging.tagyoureitbot.com/v2/openapi.json)"
+    "&nbsp;|&nbsp;[public&nbsp;api](https://api.tagyoureitbot.com/docs)"
+    "&nbsp;|&nbsp;[website](https://tagyoureitbot.com)"
 )
 
 
