@@ -20,6 +20,10 @@
 # tag-youre-it :runner:
 Play virtual tag with other users on [Reddit](https://www.reddit.com/)
 
+Frontend - https://tagyoureitbot.com
+
+API - https://api.tagyoureitbot.com/docs
+
 ## How To Play (BETA)
 For now, this bot will only supports subreddit-level play (one active game per sub). This prevents trolls from locking a global game to a (private)subreddit (See the TODO for future enhancements):
 
@@ -125,7 +129,7 @@ $ docker compose run --rm tag alembic -c tag_youre_it/alembic.ini upgrade head
 - check for downvotes on recent comments
 - extra `CommentStreamService` to stream incoming comments from sub
 - ~add simple tests~ [#3](https://github.com/nickatnight/tag-youre-it/pull/3) [#9](https://github.com/nickatnight/tag-youre-it/pull/9)
-- public web api
+- ~public web api~
 - frontend (gameplay stats)
 - multi subreddit play (basically all subs)
 - "tag back" flag
