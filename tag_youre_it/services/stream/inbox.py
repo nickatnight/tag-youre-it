@@ -1,6 +1,4 @@
 import logging
-from datetime import datetime, timezone
-from time import gmtime, strftime
 from typing import AsyncIterator, Optional, Union
 from uuid import UUID
 
@@ -9,7 +7,8 @@ from asyncpraw.models import Message, Redditor
 from asyncpraw.models import Subreddit as PrawSubReddit
 
 from tag_youre_it.core.config import settings
-from tag_youre_it.core.const import TAG_TIME, ReplyEnum, TagEnum
+from tag_youre_it.core.const import TAG_TIME_HUMAN_READABLE, ReplyEnum, TagEnum
+from tag_youre_it.core.utils import is_tag_time_expired
 from tag_youre_it.models.game import Game
 from tag_youre_it.models.player import Player
 from tag_youre_it.models.subreddit import SubReddit
@@ -18,7 +17,6 @@ from tag_youre_it.services.tag import TagService
 
 
 logger = logging.getLogger(__name__)
-tag_time_human_readable: str = strftime("%M:%S", gmtime(TAG_TIME))
 
 
 class InboxStreamService(AbstractStream[Message]):
@@ -111,26 +109,27 @@ class InboxStreamService(AbstractStream[Message]):
 
                 # is the tagger actually it?
                 if tagger.tag_time:
-                    tag_over_time: int = int(
-                        (datetime.now(timezone.utc) - tagger.tag_time).total_seconds()
-                    )
 
                     # player didn't tag anyone in allotted time, so end current game
-                    if tag_over_time > TAG_TIME:
+                    if is_tag_time_expired(tagger.tag_time):
                         await tag_service.reset_game(game.ref_id, tagger)
-                        await obj.reply(ReplyEnum.game_over(tag_over_time=tag_over_time))
+                        await obj.reply(ReplyEnum.game_over())
                         return None
 
                     # the 'it' person tagged another player
                     await tag_service.add_player_to_game(game.ref_id, tagger, tagee)
                     await parent.reply(
-                        ReplyEnum.comment_reply_tag(tagger.username, tag_time_human_readable)
+                        ReplyEnum.comment_reply_tag(tagger.username, TAG_TIME_HUMAN_READABLE)
                     )
 
                     return game_id
 
-                # TODO: if tagger is not it, get the current it tagger and
-                # see if their time has expired
+                it_player: Player = tag_service.it_player(game)
+                if is_tag_time_expired(it_player.tag_time):
+                    await tag_service.reset_game(game.ref_id, it_player)
+                    await obj.reply(ReplyEnum.game_over())
+                    return None
+
                 logger.info(f"Current active Game[{game_id}] Player(s)[{game.players}].")
 
                 await obj.reply(ReplyEnum.active_game())
@@ -139,11 +138,11 @@ class InboxStreamService(AbstractStream[Message]):
             # there is no active game, so start a new one
             await tag_service.player_untag(mention_author)
             await tag_service.player_tag(author)
-            game = await tag_service.game.create(subreddit, tagger, tagee)
+            game = await tag_service.game_create(subreddit, tagger, tagee)
 
             logger.info(f"New Game[{game}] created")
             await parent.reply(
-                ReplyEnum.comment_reply_tag(mention_author.name, tag_time_human_readable)
+                ReplyEnum.comment_reply_tag(mention_author.name, TAG_TIME_HUMAN_READABLE)
             )
 
             return game.ref_id
