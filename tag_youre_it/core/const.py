@@ -1,10 +1,16 @@
 # flake8: noqa
+from time import gmtime, strftime
 from urllib.parse import quote_plus
 
-from tag_youre_it.core.utils import _emojize
+from emoji import emojize
+
+
+def _emojize(s: str) -> str:
+    return emojize(s, variant="emoji_type", language="alias")
 
 
 TAG_TIME = 780  # seconds
+TAG_TIME_HUMAN_READABLE: str = strftime("%M:%S", gmtime(TAG_TIME))
 
 
 class TagEnum:
@@ -48,7 +54,7 @@ Welcome back to the game u/{author}! :wave:
 """
 
 GAME_OVER = """
-The current 'it' users time to tag has expired...{tag_over_time}s too late. The current game will end.
+The current 'it' users time to tag has expired. The current game will end.
 """
 
 FOOTER = (
@@ -97,8 +103,8 @@ class ReplyEnum:
         return ReplyEnum._e(USER_OPTS_OUT_GAME_INFO.format(author=author))
 
     @staticmethod
-    def game_over(tag_over_time: int) -> str:
-        return ReplyEnum._e(GAME_OVER.format(tag_over_time=tag_over_time))
+    def game_over() -> str:
+        return ReplyEnum._e(GAME_OVER)
 
 
 class SupportedSubs:

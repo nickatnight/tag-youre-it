@@ -51,6 +51,15 @@ class TagService:
 
         return None
 
+    def it_player(self, game: Game) -> Player:
+        logger.info(f"Fetching 'it' Player for Game[{game.ref_id}]")
+
+        for player in game.players:
+            if player.tag_time is not None:
+                return player
+
+        raise Exception
+
     async def add_player_to_game(
         self, game_ref_id: Union[UUID, str], tagger: Player, tagee: Player
     ) -> None:

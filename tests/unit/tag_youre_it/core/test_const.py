@@ -43,8 +43,8 @@ def test_comment_reply_tag_enum():
 
 
 def test_game_over_reply_tag_enum():
-    test_str = ReplyEnum.game_over(987)
+    test_str = ReplyEnum.game_over()
     assert (
-        f"\nThe current 'it' users time to tag has expired...987s too late. The current game will end.\n\n___\n{FOOTER}"  # noqa
+        f"\nThe current 'it' users time to tag has expired. The current game will end.\n\n___\n{FOOTER}"  # noqa
         == test_str
     )

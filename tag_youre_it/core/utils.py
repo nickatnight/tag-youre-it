@@ -1,15 +1,19 @@
 import inspect
 import logging
+from datetime import datetime, timezone
 
-from emoji import emojize
 from pydantic import BaseModel as DanticBaseModel
+
+from tag_youre_it.core.const import TAG_TIME
 
 
 logger = logging.getLogger(__name__)
 
 
-def _emojize(s: str) -> str:
-    return emojize(s, variant="emoji_type", language="alias")
+def is_tag_time_expired(tag_time: datetime) -> bool:
+    tag_over_time: int = int((datetime.now(timezone.utc) - tag_time).total_seconds())
+
+    return tag_over_time > TAG_TIME
 
 
 # https://github.com/pydantic/pydantic/issues/1223

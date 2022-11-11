@@ -72,8 +72,6 @@ class AbstractRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType],
             exclude_unset=True
         )  # This tells Pydantic to not include the values that were not sent
 
-        logger.info(f"Updating====data: {update_data}")
-        logger.info(f"Updating====obj_current-pre: {obj_current}")
         for field in update_data:
             setattr(obj_current, field, update_data[field])
 
