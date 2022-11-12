@@ -53,21 +53,17 @@ class TagService:
 
     def it_player(self, game: Game) -> Player:
         logger.info(f"Fetching 'it' Player for Game[{game.ref_id}]")
+        sorted_playes: List[Player] = sorted(game.players, key="tag_time", reverse=True)
 
-        for player in game.players:
-            if player.tag_time is not None:
-                return player
+        if not sorted_playes:
+            raise Exception
 
-        raise Exception
+        return sorted_playes[0]
 
-    async def add_player_to_game(
-        self, game_ref_id: Union[UUID, str], tagger: Player, tagee: Player
-    ) -> None:
+    async def add_player_to_game(self, game_ref_id: Union[UUID, str], tagee: Player) -> None:
         game_ref_ids: List[str] = [str(g.ref_id) for g in tagee.games]
-        tagger_obj = IPlayerUpdate(tag_time=None)
         tagge_obj = IPlayerUpdate(tag_time=datetime.now(timezone.utc))
 
-        await self.player.update(tagger, tagger_obj)
         await self.player.update(tagee, tagge_obj)
 
         if str(game_ref_id) in game_ref_ids:
@@ -88,6 +84,10 @@ class TagService:
         await self.player.tag(reddit_obj)
 
     async def player_untag(self, reddit_obj: Redditor) -> None:
+        """untag tagger for safety check
+
+        they could have been the last person tagged in a previous game
+        """
         await self.player.untag(reddit_obj)
 
     async def player_list_opted_out(self) -> List[str]:

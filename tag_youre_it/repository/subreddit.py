@@ -32,6 +32,7 @@ class SubRedditRepository(AbstractRepository[SubReddit, ISubRedditCreate, ISubRe
             description_html=reddit_obj.description_html,
             over18=reddit_obj.over18,
             subscribers=reddit_obj.subscribers,
+            icon_img=reddit_obj.icon_img,
         )
 
         instance = await self.insert(subreddit_obj)

@@ -18,7 +18,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class AbstractRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType], metaclass=ABCMeta):
-    """interface for interacting with database"""
+    """interface for database operations"""
 
     model: Type[ModelType]
 
@@ -55,6 +55,8 @@ class AbstractRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType],
         return db_obj
 
     async def get(self, ref_id: Union[UUID, str]) -> ModelType:
+        logger.info(f"Fetching [{self.model}] object by [{ref_id}]")
+
         query = select(self.model).where(getattr(self.model, "ref_id") == ref_id)
         response = await self.db.execute(query)
         scalar: Optional[ModelType] = response.scalar_one_or_none()
@@ -68,6 +70,8 @@ class AbstractRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType],
         obj_current: ModelType,
         obj_in: Union[UpdateSchemaType, ModelType],
     ) -> ModelType:
+        logger.info(f"Updating [{self.model}] object with [{obj_in}]")
+
         update_data = obj_in.dict(
             exclude_unset=True
         )  # This tells Pydantic to not include the values that were not sent
