@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -25,4 +25,4 @@ class SubRedditBase(SQLModel):
 
 
 class SubReddit(BaseModel, SubRedditBase, table=True):
-    games: Optional["Game"] = Relationship(back_populates="subreddit")  # noqa
+    games: Optional[List["Game"]] = Relationship(back_populates="subreddit")  # noqa
