@@ -53,7 +53,9 @@ class TagService:
 
     def it_player(self, game: Game) -> Player:
         logger.info(f"Fetching 'it' Player for Game[{game.ref_id}]")
-        sorted_playes: List[Player] = sorted(game.players, key="tag_time", reverse=True)
+        sorted_playes: List[Player] = sorted(
+            game.players, key=lambda p: p.tag_time, reverse=True  # type: ignore
+        )
 
         if not sorted_playes:
             raise Exception

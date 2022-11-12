@@ -25,4 +25,4 @@ class SubRedditBase(SQLModel):
 
 
 class SubReddit(BaseModel, SubRedditBase, table=True):
-    games: Optional[List["Game"]] = Relationship(back_populates="subreddit")  # noqa
+    games: Optional[List["Game"]] = Relationship(back_populates="subreddit")  # type: ignore # noqa

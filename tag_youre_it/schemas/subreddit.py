@@ -11,7 +11,7 @@ class ISubRedditCreate(SubRedditBase):
 
 class ISubRedditRead(SubRedditBase):
     ref_id: UUID
-    games: Optional[List["Game"]] = []  # noqa
+    games: Optional[List["Game"]] = []  # type: ignore # noqa
 
 
 @optional
