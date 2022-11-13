@@ -1,3 +1,4 @@
+from typing import List, Optional
 from uuid import UUID
 
 from tag_youre_it.core.utils import optional
@@ -10,6 +11,7 @@ class ISubRedditCreate(SubRedditBase):
 
 class ISubRedditRead(SubRedditBase):
     ref_id: UUID
+    games: Optional[List["Game"]] = []  # type: ignore # noqa
 
 
 @optional

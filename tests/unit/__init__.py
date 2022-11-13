@@ -19,4 +19,5 @@ test_subreddit = {
     "description_html": "<!-- SC_OFF --><div class='md'><p>Tag!</p>+</div><!-- SC_ON -->",
     "over18": False,
     "subscribers": 3,
+    "icon_img": "url.com",
 }

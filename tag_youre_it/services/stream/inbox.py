@@ -117,7 +117,7 @@ class InboxStreamService(AbstractStream[Message]):
                         return None
 
                     # the 'it' person tagged another player
-                    await tag_service.add_player_to_game(game.ref_id, tagger, tagee)
+                    await tag_service.add_player_to_game(game.ref_id, tagee)
                     await parent.reply(
                         ReplyEnum.comment_reply_tag(tagger.username, TAG_TIME_HUMAN_READABLE)
                     )

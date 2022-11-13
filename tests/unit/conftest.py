@@ -69,4 +69,5 @@ def subreddit() -> SubReddit:
         description_html=test_subreddit["description_html"],
         over18=test_subreddit["over18"],
         subscribers=test_subreddit["subscribers"],
+        icon_img=test_subreddit["icon_img"],
     )

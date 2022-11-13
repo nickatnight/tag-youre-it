@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import List, Optional
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 from tag_youre_it.models.base import BaseModel
 
@@ -17,7 +17,7 @@ class SubRedditBase(SQLModel):
     description_html: str = Field(description="Subreddit description, in HTML.")
     over18: bool = Field(description="Whether the subreddit is NSFW.")
     subscribers: int = Field(description="Count of subscribers.")
-
+    icon_img: str = Field(description="The url of the Subreddit icon img.")
     # custom
     is_banned: Optional[bool] = Field(
         default=False, description="Is the bot banned from the Subreddit."
@@ -25,4 +25,4 @@ class SubRedditBase(SQLModel):
 
 
 class SubReddit(BaseModel, SubRedditBase, table=True):
-    pass
+    games: Optional[List["Game"]] = Relationship(back_populates="subreddit")  # type: ignore # noqa
