@@ -16,7 +16,9 @@ class GameBase(SQLModel):
 
 
 class Game(BaseModel, GameBase, table=True):
-    subreddit: Optional[SubReddit] = Relationship(back_populates="games")
+    subreddit: Optional[SubReddit] = Relationship(
+        back_populates="games", sa_relationship_kwargs={"lazy": "selectin"}
+    )
     players: List[Player] = Relationship(
         back_populates="games",
         link_model=GamePlayerLink,
