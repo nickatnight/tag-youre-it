@@ -63,6 +63,12 @@ FEATURE_DISABLED = """
 This message will most likely not be read, as I am in DEBUG mode :no_entry:
 """
 
+OPT_OUT = (
+    f"&nbsp;|&nbsp;[opt&nbsp;out](https://www.reddit.com/message/compose/?to=TagYoureItBot&subject={quote_plus(TagEnum.DISABLE_PHRASE)})"
+    if not settings.DEBUG
+    else ""
+)
+
 FOOTER = (
     "^^[&nbsp;how&nbsp;to&nbsp;use]"
     "(https://www.reddit.com/r/TagYoureItBot/comments/yi25li/tagyoureitbot_info_v22/)"
@@ -71,9 +77,7 @@ FOOTER = (
     "&nbsp;|&nbsp;[wikihow](https://www.wikihow.com/Play-Tag)"
     "&nbsp;|&nbsp;[public&nbsp;api](https://api.tagyoureitbot.com/docs)"
     "&nbsp;|&nbsp;[website](https://tagyoureitbot.com)"
-    f"&nbsp;|&nbsp;[opt&nbsp;out](https://www.reddit.com/message/compose/?to=TagYoureItBot&subject={quote_plus(TagEnum.DISABLE_PHRASE)})"
-    if not settings.DEBUG
-    else ""
+    f"{OPT_OUT}"
 )
 
 
