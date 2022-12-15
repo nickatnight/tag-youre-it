@@ -6,6 +6,7 @@ from uuid import UUID
 from asyncpraw.models import Redditor
 from asyncpraw.models import Subreddit as PrawSubReddit
 
+from tag_youre_it.core.exceptions import GameNotFoundError, NoPlayersFoundError
 from tag_youre_it.models.game import Game
 from tag_youre_it.models.player import Player
 from tag_youre_it.models.subreddit import SubReddit
@@ -35,7 +36,7 @@ class TagService:
         db_obj = await self.game.get(ref_id=game_ref_id)
 
         if not db_obj:
-            raise Exception("no game found")
+            raise GameNotFoundError(f"Game[{game_ref_id}] not found")
 
         await self.game.update(db_obj, game_obj)
 
@@ -53,12 +54,16 @@ class TagService:
 
     def it_player(self, game: Game) -> Player:
         logger.info(f"Fetching 'it' Player for Game[{game.ref_id}]")
+
+        # TODO: either prevent a player from tagging someone in a differnet sub
+        # while it or add new field to determine when tagged
+        players: List[Player] = [p for p in game.players if p.tag_time]
         sorted_playes: List[Player] = sorted(
-            game.players, key=lambda p: p.tag_time, reverse=True  # type: ignore
+            players, key=lambda p: p.tag_time, reverse=True  # type: ignore
         )
 
         if not sorted_playes:
-            raise Exception
+            raise NoPlayersFoundError(f"Could not find 'it' Player for Game[{game.ref_id}]")
 
         return sorted_playes[0]
 

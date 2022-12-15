@@ -4,3 +4,11 @@ class TagYoureItException(Exception):
 
 class ImproperlyConfigured(TagYoureItException):
     pass
+
+
+class NoPlayersFoundError(TagYoureItException):
+    pass
+
+
+class GameNotFoundError(TagYoureItException):
+    pass

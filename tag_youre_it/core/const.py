@@ -4,6 +4,8 @@ from urllib.parse import quote_plus
 
 from emoji import emojize
 
+from tag_youre_it.core.config import settings
+
 
 def _emojize(s: str) -> str:
     return emojize(s, variant="emoji_type", language="alias")
@@ -57,15 +59,21 @@ GAME_OVER = """
 The current 'it' users time to tag has expired. The current game will end.
 """
 
+FEATURE_DISABLED = """
+This message will most likely not be read, as I am in DEBUG mode :no_entry:
+"""
+
 FOOTER = (
     "^^[&nbsp;how&nbsp;to&nbsp;use]"
     "(https://www.reddit.com/r/TagYoureItBot/comments/yi25li/tagyoureitbot_info_v22/)"
-    f"&nbsp;|&nbsp;[opt&nbsp;out](https://www.reddit.com/message/compose/?to=TagYoureItBot&subject={quote_plus(TagEnum.DISABLE_PHRASE)})"
     "&nbsp;|&nbsp;[creator](https://www.reddit.com/message/compose/?to=throwie_one)"
     "&nbsp;|&nbsp;[source&nbsp;code](https://github.com/nickatnight/tag-youre-it)"
     "&nbsp;|&nbsp;[wikihow](https://www.wikihow.com/Play-Tag)"
     "&nbsp;|&nbsp;[public&nbsp;api](https://api.tagyoureitbot.com/docs)"
     "&nbsp;|&nbsp;[website](https://tagyoureitbot.com)"
+    f"&nbsp;|&nbsp;[opt&nbsp;out](https://www.reddit.com/message/compose/?to=TagYoureItBot&subject={quote_plus(TagEnum.DISABLE_PHRASE)})"
+    if not settings.DEBUG
+    else ""
 )
 
 
@@ -105,6 +113,10 @@ class ReplyEnum:
     @staticmethod
     def game_over() -> str:
         return ReplyEnum._e(GAME_OVER)
+
+    @staticmethod
+    def feature_disabled() -> str:
+        return ReplyEnum._e(FEATURE_DISABLED)
 
 
 class SupportedSubs:

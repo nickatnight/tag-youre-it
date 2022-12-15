@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     BOT_NAME: str = Field(default="", env="BOT_NAME")
     VERSION: str = Field(default="", env="VERSION")
     DEVELOPER: str = Field(default="", env="DEVELOPER")
-
+    DEBUG: bool = Field(default=True, env="DEBUG")
     POSTGRES_USER: str = Field(default="", env="POSTGRES_USER")
     POSTGRES_PASSWORD: str = Field(default="", env="POSTGRES_PASSWORD")
     POSTGRES_HOST: str = Field(default="", env="POSTGRES_HOST")
