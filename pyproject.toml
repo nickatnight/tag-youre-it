@@ -29,6 +29,7 @@ mypy = "^0.982"
 types-emoji = "^2.1.0"
 codespell = "^2.2.2"
 tomli = "^2.0.1"
+Faker = "^15.3.4"
 
 [tool.poetry.scripts]
 apply-migrations = "tag_youre_it.scripts.apply_migrations:main"

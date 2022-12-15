@@ -20,6 +20,9 @@ test:
 bash:
 	docker compose exec tag bash
 
+db-restore:
+	docker compose run --rm db pg_restore -U tagyoureit -d tagyoureit tagyoureit.sql
+
 db-shell:
 	docker compose exec db psql -U tagyoureit -d tagyoureit
 
