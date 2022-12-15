@@ -37,6 +37,7 @@ class GameRepository(AbstractRepository[Game, IGameCreate, IGameUpdate]):
         logger.info(f"Adding Players[{player.username}] to Game[{game.ref_id}]")
 
     async def active(self) -> List[Game]:
+        logger.info("Fetching current game")
         statement = (
             select(self.model)
             .where(self.model.is_active == True)  # noqa

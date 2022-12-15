@@ -128,3 +128,4 @@ class SupportedSubs:
 
     TAG_YOURE_IT_BOT = "TagYoureItBot"
     DOGECOIN = "dogecoin"
+    TEST = "test"
