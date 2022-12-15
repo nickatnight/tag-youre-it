@@ -25,4 +25,6 @@ class SubRedditBase(SQLModel):
 
 
 class SubReddit(BaseModel, SubRedditBase, table=True):
-    games: Optional[List["Game"]] = Relationship(back_populates="subreddit", sa_relationship_kwargs={"lazy": "selectin"})  # type: ignore # noqa
+    games: Optional[List["Game"]] = Relationship(  # type: ignore # noqa
+        back_populates="subreddit", sa_relationship_kwargs={"lazy": "selectin"}
+    )

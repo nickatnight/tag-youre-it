@@ -48,3 +48,11 @@ def test_game_over_reply_tag_enum():
         f"\nThe current 'it' users time to tag has expired. The current game will end.\n\n___\n{FOOTER}"  # noqa
         == test_str
     )
+
+
+def test_feature_disabled_tag_enum():
+    test_str = ReplyEnum.feature_disabled()
+    assert (
+        f"\nThis message will most likely not be read, as I am in DEBUG mode ⛔️\n\n___\n{FOOTER}"
+        == test_str
+    )

@@ -27,9 +27,14 @@ class InboxStreamService(AbstractStream[Message]):
         author_name = author.name
         logger.info(f"Reading mention from [{author_name}]")
 
-        # direct messages which involve user engagement take precedence
+        # direct messages which may involve user engagement take precedence
         if obj.was_comment is False:
             logger.info(f"Subject of Message[{obj.subject}")
+
+            if settings.DEBUG is True:
+                await obj.reply(ReplyEnum.feature_disabled())
+                await obj.mark_read()
+                return False
 
             # user previously opted out and wants to play again
             enable_check = TagEnum.ENABLE_PHRASE == obj.subject.title().lower()

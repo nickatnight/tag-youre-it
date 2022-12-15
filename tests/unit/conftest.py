@@ -59,6 +59,20 @@ def player() -> Player:
 
 
 @pytest.fixture
+def it_player(player: Player) -> Player:
+    return Player(
+        username="testname",
+        reddit_id="testid",
+        icon_img=test_redditor_one["icon_img"],
+        is_employee=test_redditor_one["is_employee"],
+        created_utc=test_redditor_one["created_utc"],
+        verified=False,
+        is_suspended=False,
+        has_verified_email=True,
+    )
+
+
+@pytest.fixture
 def subreddit() -> SubReddit:
     return SubReddit(
         name=test_subreddit["name"],
