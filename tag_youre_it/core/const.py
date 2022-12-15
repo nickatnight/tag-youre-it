@@ -11,7 +11,7 @@ def _emojize(s: str) -> str:
     return emojize(s, variant="emoji_type", language="alias")
 
 
-TAG_TIME = 780  # seconds
+TAG_TIME = 1800  # seconds
 TAG_TIME_HUMAN_READABLE: str = strftime("%M:%S", gmtime(TAG_TIME))
 
 
@@ -128,3 +128,4 @@ class SupportedSubs:
 
     TAG_YOURE_IT_BOT = "TagYoureItBot"
     DOGECOIN = "dogecoin"
+    TEST = "test"

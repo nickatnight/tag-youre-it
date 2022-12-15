@@ -21,6 +21,7 @@ class Settings(BaseSettings):
 
     DB_POOL_SIZE: int = Field(default=83, env="DB_POOL_SIZE")
     WEB_CONCURRENCY: int = Field(default=9, env="WEB_CONCURRENCY")
+    ECHO: bool = Field(default=False, env="ECHO")
     POOL_SIZE: Optional[int]
     POSTGRES_URL: Optional[str]
 

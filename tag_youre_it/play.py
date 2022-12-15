@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     e = GameEngine(
         tag_service=TagService(player, game, subreddit),
-        stream_service=InboxStreamService(SupportedSubs.TAG_YOURE_IT_BOT),
+        stream_service=InboxStreamService(SupportedSubs.DOGECOIN),
         reddit_config=config,
     )
 
